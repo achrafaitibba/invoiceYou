@@ -1,2 +1,2 @@
 # invoiceYou
-You stands for YOUssef, a friend of mine hh
+The "You" in invoiceYou stands for YOUssef, a friend of mine hh
