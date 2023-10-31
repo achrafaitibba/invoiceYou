@@ -1,4 +1,4 @@
-package com.onxshield.invoiceyou.model;
+package com.onxshield.invoiceyou.invoicestatement.model;
 
 public enum unit {
     KG,
