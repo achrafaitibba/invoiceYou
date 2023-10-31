@@ -21,7 +21,6 @@ public class invoice {
 
     @Id
     @Column(name = "invoice_id")
-    @NotNull
     private String invoiceId;
 
     @Column(name = "invoice_date")
@@ -30,7 +29,6 @@ public class invoice {
     //todo this is just for the mapping, review the attributes to select what to send to the client side
     @OneToOne
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
-    @NotNull
     private client client; //todo extract ICE, NAME, BANK NAME
 
     @NotBlank
@@ -49,7 +47,7 @@ public class invoice {
     private Date paymentDate;
 
     @OneToMany
-    @JoinColumn(name = "fk_merch_id", referencedColumnName = "merch_id")
+    //@JoinColumn(name = "fk_merch_id", referencedColumnName = "merch_id")
     @NotBlank
     private List<merchandise> merchandiseList;
 
@@ -63,5 +61,5 @@ public class invoice {
     private status status;
 
     @NotBlank
-    private String invoiceFile; //file could be word or pdf
+    private String invoiceFile; //todo file could be word or pdf
 }

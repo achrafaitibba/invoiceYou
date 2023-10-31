@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/invoiceyou
+    url: jdbc:mysql://localhost:3306/invoice
     jdbc-url: jdbc:mysql://localhost:3306/invoiceyou
     username: root
     password: achraf

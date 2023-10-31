@@ -6,5 +6,6 @@ public enum category {
     PLUMBING,
     PAINTING,
     ELECTRICITY,
-    HARDWARE
+    HARDWARE,
+    UNCATEGORIZED
 }
