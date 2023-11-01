@@ -32,13 +32,19 @@ public class invoice {
     private client client; //todo extract ICE, NAME, BANK NAME
 
     @NotBlank
-    private Long totalTTC;
+    private Long totalTTC; //todo , convert it to text format "5=> five.."
+
+    @NotBlank
+    private String spelledTotal;
 
     @NotBlank
     private Long TVA;
 
     @NotBlank
     private paymentMethod paymentMethod;
+
+    @NotBlank
+    private String bankName;
 
     @NotBlank
     private int checkNumber;
