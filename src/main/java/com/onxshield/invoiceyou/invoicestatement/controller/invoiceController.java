@@ -5,20 +5,37 @@ import com.onxshield.invoiceyou.invoicestatement.response.invoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.service.invoiceService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/invoice")
 @RequiredArgsConstructor
 public class invoiceController {
     private final invoiceService invoiceService;
-    @PostMapping("/basic/create")
-    public ResponseEntity<invoiceResponse> createInvoice(
+    @PostMapping("/create/basic")
+    public ResponseEntity<invoiceResponse> createBasicInvoice(
             @RequestBody basicInvoiceRequest request
             ){
         return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
     }
+    @PostMapping("/create")
+    public void createInvoice(
+    ){
+
+    }
+    @PostMapping("/update")
+    public void updateInvoice(){
+
+    }
+    @GetMapping("/all")
+    public void getAllInvoices(){
+
+    }
+
+    @GetMapping("/{id}")
+    public void getInvoiceById(@PathVariable String id){
+        
+    }
+
+
 }
