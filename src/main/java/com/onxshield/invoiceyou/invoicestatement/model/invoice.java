@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 
 import java.util.Date;
@@ -15,6 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Component
 @Table(name = "invoice_statement")
 public class invoice {
 
@@ -46,7 +48,7 @@ public class invoice {
     private String bankName;
 
     @NotBlank
-    private int checkNumber;
+    private Integer checkNumber;
 
     @NotBlank
     private Date paymentDate;
