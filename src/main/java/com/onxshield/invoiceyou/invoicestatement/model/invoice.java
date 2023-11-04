@@ -2,10 +2,12 @@ package com.onxshield.invoiceyou.invoicestatement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.Cascade;
 import org.springframework.stereotype.Component;
 
 
@@ -25,48 +27,50 @@ public class invoice {
     private String invoiceId;
 
     @Column(name = "invoice_date")
-    private Date invoiceDAte;
+    @NotNull
+    @Temporal(TemporalType.DATE)
+    private Date invoiceDate;
 
     //todo this is just for the mapping, review the attributes to select what to send to the client side
-    @OneToOne
+    @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
+    @NotNull
     private client client; //todo extract ICE, NAME, BANK NAME
 
-    @NotBlank
-    private Long totalTTC; //todo , convert it to text format "5=> five.."
+    @NotNull
+    private Long totalTTC; //todo convert it to text format "5=> five.."
 
-    @NotBlank
+    @NotNull
     private String spelledTotal;
 
-    @NotBlank
     private Long TVA;
 
-    @NotBlank
+    @NotNull
+    @Enumerated(EnumType.STRING)
     private paymentMethod paymentMethod;
 
-    @NotBlank
     private String bankName;
 
-    @NotBlank
-    private Integer checkNumber;
+    private Integer checkNumber; //todo could be null if paymentMethod = VIR
 
-    @NotBlank
+    @Temporal(TemporalType.DATE)
     private Date paymentDate;
 
     @OneToMany
     //@JoinColumn(name = "fk_merch_id", referencedColumnName = "merch_id")
-    @NotBlank
+    //@NotBlank
     private List<merchandise> merchandiseList;
 
-    @NotBlank
-    private Boolean printed;
+    @Builder.Default
+    private Boolean printed = false;
 
-    @NotBlank
-    private action action;
+    @Builder.Default
+    @Enumerated(EnumType.STRING)
+    private action invoiceAction = action.NOT_YET;
 
-    @NotBlank
-    private status status;
+    @Builder.Default //todo , check how this annotation work in docs
+    @Enumerated(EnumType.STRING)
+    private status invoiceStatus = status.NOT_YET;
 
-    @NotBlank
-    private String invoiceFile; //todo file could be word or pdf
+    private String invoiceFile = ""; //todo file could be word or pdf
 }
