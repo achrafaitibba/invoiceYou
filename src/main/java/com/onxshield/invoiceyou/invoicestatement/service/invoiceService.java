@@ -39,22 +39,6 @@ public class invoiceService {
     }
 
     private List<merchandise> generatedMerch(ArrayList<merchandiseRequest> merchandiseList) {
-        //the following code is just for testing without inserting into db directly
-        List<merchandise> merch = new ArrayList<>();
-        merchandise m1 = new merchandise();
-
-        product p1 = new product();
-        p1.setName("p1");
-        p1.setProductId(1L);
-        product p2 = new product();
-        p2.setName("p2");
-        p2.setProductId(2L);
-
-        m1.setQuantity(10L);
-        m1.setTotal(m1.getQuantity());
-
-
-        //end of test code
         return null; //todo to be implemented
     }
 
