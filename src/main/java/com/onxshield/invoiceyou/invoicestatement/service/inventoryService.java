@@ -34,8 +34,9 @@ public class inventoryService {
     }
 
     public int deleteProduct(Long id) {
-        var pro = productRepository.findById(id).orElseThrow();
-        var inv = inventoryRepository.findByProductProductId(id).orElseThrow();
+        //todo make this code better, change the response entity answer in the controller
+        productRepository.findById(id).orElseThrow();
+        inventoryRepository.findByProductProductId(id).orElseThrow();
         inventoryRepository.deleteById(id);
         productRepository.deleteById(id);
         return 1;
