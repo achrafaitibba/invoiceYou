@@ -8,6 +8,8 @@ import com.onxshield.invoiceyou.invoicestatement.request.productRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 public class inventoryService {
@@ -37,5 +39,17 @@ public class inventoryService {
         inventoryRepository.deleteById(id);
         productRepository.deleteById(id);
         return 1;
+    }
+
+    public Integer updateProduct(Long id, productRequest request) {
+        Optional<product> productToUpdate = productRepository.findById(id);
+        if(productToUpdate.isPresent()){
+            productToUpdate.get().setName(request.getName());
+            productToUpdate.get().setUnit(request.getUnit());
+            productToUpdate.get().setCategoryList(String.join(", ", request.getCategoryList()));
+            productRepository.save(productToUpdate.get());
+            return 1;
+        }
+        else return 0;
     }
 }

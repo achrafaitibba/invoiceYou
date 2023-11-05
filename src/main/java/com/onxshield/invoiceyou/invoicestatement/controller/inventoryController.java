@@ -7,22 +7,26 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/inventory")
+@RequestMapping("/api/v1/product")
 @RequiredArgsConstructor
 public class inventoryController {
 
     private final inventoryService inventoryService_;
-
-    // update : product details
     // increase/decrease : product items
 
-    @PostMapping("/product/add")
+    @PostMapping("/add")
     public ResponseEntity addProduct(@RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService_.addProduct(request));
     }
 
-    @DeleteMapping("/product/delete/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<Integer> deleteProduct(@PathVariable Long id ){
         return ResponseEntity.ok(inventoryService_.deleteProduct(id));
     }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<Integer> updateProduct(@PathVariable Long id, @RequestBody productRequest request){
+        return ResponseEntity.ok(inventoryService_.updateProduct(id, request));
+    }
+
 }
