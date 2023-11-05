@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.*;
 public class inventoryController {
 
     private final inventoryService inventoryService_;
-    // increase/decrease : product items
 
     @PostMapping("/add")
     public ResponseEntity addProduct(@RequestBody productRequest request){ //todo make it better
