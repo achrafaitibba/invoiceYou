@@ -1,9 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.service;
 
-import com.onxshield.invoiceyou.invoicestatement.model.client;
 import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.merchandise;
-import com.onxshield.invoiceyou.invoicestatement.model.product;
 import com.onxshield.invoiceyou.invoicestatement.repository.clientRepository;
 import com.onxshield.invoiceyou.invoicestatement.repository.invoiceRepository;
 import com.onxshield.invoiceyou.invoicestatement.request.basicInvoiceRequest;
@@ -14,7 +12,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +30,7 @@ public class invoiceService {
                 .checkNumber(request.getCheckNumber() == null ? 0 : request.getCheckNumber()) //todo test it
                 .merchandiseList(generatedMerch(request.getMerchandiseList()))
                 .build();
-        var savedInvoice = invoiceRepository.save(inv);
+        invoiceRepository.save(inv);
 
         return null;
     }
