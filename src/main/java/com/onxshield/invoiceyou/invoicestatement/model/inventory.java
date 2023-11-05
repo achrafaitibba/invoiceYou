@@ -20,10 +20,7 @@ public class inventory {
     @OneToOne
     @JoinColumn(name = "fk_product_id", referencedColumnName = "product_id", unique = true)
     private product product;
-
-    private long availability;
-
-    private long buyPrice;
-
-    private long sellPrice;
+    private Long availability;
+    private Long buyPrice;
+    private Long sellPrice;
 }

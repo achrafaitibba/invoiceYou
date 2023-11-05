@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
+import com.onxshield.invoiceyou.invoicestatement.request.inventoryRequest;
 import com.onxshield.invoiceyou.invoicestatement.request.productRequest;
 import com.onxshield.invoiceyou.invoicestatement.service.inventoryService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +16,7 @@ public class inventoryController {
     // increase/decrease : product items
 
     @PostMapping("/add")
-    public ResponseEntity addProduct(@RequestBody productRequest request){
+    public ResponseEntity addProduct(@RequestBody productRequest request){ //todo make it better
         return ResponseEntity.ok(inventoryService_.addProduct(request));
     }
 
@@ -27,6 +28,10 @@ public class inventoryController {
     @PutMapping("/update/{id}")
     public ResponseEntity<Integer> updateProduct(@PathVariable Long id, @RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService_.updateProduct(id, request));
+    }
+    @PatchMapping("/inventory/update/{productId}")
+    public ResponseEntity<Integer> updateInventory(@PathVariable Long productId, @RequestBody inventoryRequest request){
+        return ResponseEntity.ok(inventoryService_.updateInventory(productId, request));
     }
 
 }

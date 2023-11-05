@@ -4,6 +4,7 @@ import com.onxshield.invoiceyou.invoicestatement.model.inventory;
 import com.onxshield.invoiceyou.invoicestatement.model.product;
 import com.onxshield.invoiceyou.invoicestatement.repository.inventoryRepository;
 import com.onxshield.invoiceyou.invoicestatement.repository.productRepository;
+import com.onxshield.invoiceyou.invoicestatement.request.inventoryRequest;
 import com.onxshield.invoiceyou.invoicestatement.request.productRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,9 +26,9 @@ public class inventoryService {
         );
         inventoryRepository.save(inventory.builder()
                         .product(savedProduct)
-                        .availability(0)
-                        .sellPrice(0)
-                        .buyPrice(0)
+                        .availability(0L)
+                        .sellPrice(0L)
+                        .buyPrice(0L)
                 .build());
         return savedProduct;
     }
@@ -51,5 +52,19 @@ public class inventoryService {
             return 1;
         }
         else return 0;
+    }
+
+    public int updateInventory(Long productId, inventoryRequest request) {
+        //todo make this code better
+        Optional<inventory> inventoryToUpdate = inventoryRepository.findById(productId);
+        int exist = 0;
+        if(inventoryToUpdate.isPresent()){
+            inventoryToUpdate.get().setAvailability(request.getAvailability());
+            inventoryToUpdate.get().setBuyPrice(request.getBuyPrice());
+            inventoryToUpdate.get().setSellPrice(request.getSellPrice());
+            inventoryRepository.save(inventoryToUpdate.get());
+            exist = 1;
+        }
+        return exist;
     }
 }
