@@ -31,19 +31,18 @@ public class invoice {
     @Temporal(TemporalType.DATE)
     private Date invoiceDate;
 
-    //todo this is just for the mapping, review the attributes to select what to send to the client side
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
     @NotNull
-    private client client; //todo extract ICE, NAME, BANK NAME
+    private client client;
 
     @NotNull
-    private Long totalTTC; //todo convert it to text format "5=> five.."
+    private Long totalTTC;
 
     @NotNull
-    private String spelledTotal;
+    private String spelledTotal; //todo live conversion endpoint
 
-    private Long TVA;
+    private Long TVA; //todo live conversion endpoint
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -51,7 +50,7 @@ public class invoice {
 
     private String bankName;
 
-    private Integer checkNumber; //todo could be null if paymentMethod = VIR
+    private Integer checkNumber; //todo could be null if paymentMethod = VIR/ESP
 
     @Temporal(TemporalType.DATE)
     private Date paymentDate;

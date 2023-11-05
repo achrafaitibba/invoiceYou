@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Random;
 import java.util.UUID;
 @Data
 @Builder
@@ -20,9 +21,9 @@ public class client {
 
     @Id
     @Column(name = "client_id")
-    private UUID clientId = UUID.randomUUID();
+    private Long clientId = Math.abs(new Random().nextLong());
     @NotNull
     private String name;
-    private String ICE;
+    private Long ICE;
 
 }
