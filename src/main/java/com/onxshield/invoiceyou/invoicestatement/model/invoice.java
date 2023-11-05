@@ -57,17 +57,17 @@ public class invoice {
 
     @OneToMany
     //@JoinColumn(name = "fk_merch_id", referencedColumnName = "merch_id")
-    //@NotBlank
+    //@NotNull
     private List<merchandise> merchandiseList;
 
-    @Builder.Default
+    //@Builder.Default
     private Boolean printed = false;
 
-    @Builder.Default
+    //@Builder.Default
     @Enumerated(EnumType.STRING)
     private action invoiceAction = action.NOT_YET;
 
-    @Builder.Default //todo , check how this annotation work in docs
+    //@Builder.Default //todo , check how this annotation work in docs
     @Enumerated(EnumType.STRING)
     private status invoiceStatus = status.NOT_YET;
 

@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.request;
 
+import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,13 +13,13 @@ import java.util.Date;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class basicInvoice {
+public class basicInvoiceRequest {
     private String invoiceId;
     private Date invoiceDate;
     private Long clientId;
     private Long totalTTC;
-    private String paymentMethod;
-    private String checkNumber;
+    private paymentMethod paymentMethod;
+    private Integer checkNumber;
     private ArrayList<merchandiseRequest> merchandiseList;
 
 
