@@ -26,6 +26,6 @@ public class product {
     @NotNull
     @Enumerated(EnumType.STRING)
     private unit unit;
-    //@NotNull
+    @NotNull
     private String categoryList;
 }
