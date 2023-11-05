@@ -1,13 +1,11 @@
 package com.onxshield.invoiceyou.invoicestatement.model;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.Cascade;
 import org.springframework.stereotype.Component;
 
 
@@ -56,14 +54,11 @@ public class invoice {
     private Date paymentDate;
 
     @OneToMany
-    //@JoinColumn(name = "fk_merch_id", referencedColumnName = "merch_id")
-    //@NotNull
+
     private List<merchandise> merchandiseList;
 
-    //@Builder.Default
     private Boolean printed = false;
 
-    //@Builder.Default
     @Enumerated(EnumType.STRING)
     private action invoiceAction = action.NOT_YET;
 
