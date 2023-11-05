@@ -8,9 +8,6 @@ import com.onxshield.invoiceyou.invoicestatement.request.productRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.stream.Collectors;
-
 @Service
 @RequiredArgsConstructor
 public class inventoryService {
