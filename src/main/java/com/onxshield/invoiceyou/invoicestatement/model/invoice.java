@@ -35,12 +35,12 @@ public class invoice {
     private client client;
 
     @NotNull
-    private Long totalTTC;
+    private Double totalTTC;
 
     @NotNull
     private String spelledTotal; //todo live conversion endpoint
 
-    private Long TVA; //todo live conversion endpoint
+    private Double TVA; //todo live conversion endpoint
 
     @NotNull
     @Enumerated(EnumType.STRING)

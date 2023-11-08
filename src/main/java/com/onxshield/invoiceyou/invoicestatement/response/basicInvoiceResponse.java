@@ -17,8 +17,8 @@ public class basicInvoiceResponse {
     private Date invoiceDate;
     private String clientName;
     private Long ICE;
-    private Long totalTTC;
-    private Long TVA;
+    private Double totalTTC;
+    private Double TVA;
     private ArrayList<merchandiseResponse> merchandiseList;
     private String spelledTotal;
     private String paymentMethod;

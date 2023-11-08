@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class inventoryRequest {
-    private Long availability;
-    private Long buyPrice;
-    private Long sellPrice;
+    private Double availability;
+    private Double buyPrice;
+    private Double sellPrice;
 }

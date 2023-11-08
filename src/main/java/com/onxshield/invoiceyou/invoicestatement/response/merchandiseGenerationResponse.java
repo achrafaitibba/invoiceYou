@@ -9,10 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class merchandiseResponse {
-    private String productName;
-    private String unit;
+public class merchandiseGenerationResponse {
+    private Long productId;
     private Double quantity;
-    private Double sellPrice;
-    private Double totalTTC;
 }

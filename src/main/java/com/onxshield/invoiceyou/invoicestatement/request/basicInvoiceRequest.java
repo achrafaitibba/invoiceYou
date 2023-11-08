@@ -1,6 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.request;
 
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
+
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,10 +18,10 @@ public class basicInvoiceRequest {
     private String invoiceId;
     private Date invoiceDate;
     private Long clientId;
-    private Long totalTTC;
+    private Double totalTTC;
     private paymentMethod paymentMethod;
     private Integer checkNumber;
-    private ArrayList<merchandiseGenerationRequest> merchandiseList;
+    private ArrayList<merchandiseRequest> merchandiseList;
 
 
 }

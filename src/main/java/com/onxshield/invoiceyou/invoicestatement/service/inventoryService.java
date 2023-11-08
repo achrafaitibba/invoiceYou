@@ -26,9 +26,9 @@ public class inventoryService {
         );
         inventoryRepository.save(inventory.builder()
                         .product(savedProduct)
-                        .availability(0L)
-                        .sellPrice(0L)
-                        .buyPrice(0L)
+                        .availability(0d)
+                        .sellPrice(0d)
+                        .buyPrice(0d)
                 .build());
         return savedProduct;
     }

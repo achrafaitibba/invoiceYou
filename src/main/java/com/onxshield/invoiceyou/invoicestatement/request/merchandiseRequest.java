@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class merchandiseGenerationRequest {
-    private Double totalTTC;
-    private Integer productsCount;
-    private String categories;
+public class merchandiseRequest {
+    private Long productId;
+    private Double quantity;
 }
