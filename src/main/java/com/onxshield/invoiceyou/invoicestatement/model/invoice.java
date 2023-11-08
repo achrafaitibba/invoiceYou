@@ -29,7 +29,7 @@ public class invoice {
     @Temporal(TemporalType.DATE)
     private Date invoiceDate;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
     @NotNull
     private client client;

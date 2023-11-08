@@ -20,7 +20,7 @@ public class basicInvoiceRequest {
     private Long totalTTC;
     private paymentMethod paymentMethod;
     private Integer checkNumber;
-    private ArrayList<merchandiseRequest> merchandiseList;
+    private ArrayList<merchandiseGenerationRequest> merchandiseList;
 
 
 }
