@@ -12,5 +12,5 @@ import lombok.NoArgsConstructor;
 public class merchandiseGenerationRequest {
     private Double totalTTC;
     private Integer productsCount;
-    private String categories;
+    private String category;
 }
