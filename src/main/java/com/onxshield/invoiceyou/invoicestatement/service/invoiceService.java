@@ -84,7 +84,7 @@ public class invoiceService {
         int generatedCount = 0;
         List<String> categories = Arrays.asList(requestDetails.getCategories().split(", "));
         List<inventory> allProducts = inventoryRepository.findAll();
-        long targetedTotal = 0L;
+        double targetedTotal = 0d;
         while(targetedTotal<=requestDetails.getTotalTTC()+1.5 & targetedTotal>=requestDetails.getTotalTTC()+1){
 
         }
