@@ -2,12 +2,14 @@ package com.onxshield.invoiceyou.invoicestatement.model;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import java.util.Random;
 @Data
@@ -15,11 +17,13 @@ import java.util.Random;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+@Component
 public class client {
 
     @Id
     @Column(name = "client_id")
-    private Long clientId = Math.abs(new Random().nextLong());
+    @GeneratedValue
+    private Long clientId;
     @NotNull
     private String name;
     private Long ICE;
