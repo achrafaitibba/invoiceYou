@@ -19,10 +19,14 @@ public class clientController {
         return ResponseEntity.ok(clientService.createClient(request));
     }
 
+    @PutMapping("/update/{id}")
+    public ResponseEntity<clientResponse> updateClient(@PathVariable Long id,
+                                                       @RequestBody clientRequest request){
+        return ResponseEntity.ok(clientService.updateClient(id, request));
+    }
     @GetMapping()
     public ResponseEntity<List<clientResponse>> allClient(){
         return ResponseEntity.ok(clientService.allClients());
     }
-
 
 }
