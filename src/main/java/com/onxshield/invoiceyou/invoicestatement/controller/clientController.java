@@ -5,10 +5,9 @@ import com.onxshield.invoiceyou.invoicestatement.dto.response.clientResponse;
 import com.onxshield.invoiceyou.invoicestatement.service.clientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/v1/clients")
@@ -20,6 +19,10 @@ public class clientController {
         return ResponseEntity.ok(clientService.createClient(request));
     }
 
+    @GetMapping()
+    public ResponseEntity<List<clientResponse>> allClient(){
+        return ResponseEntity.ok(clientService.allClients());
+    }
 
 
 }
