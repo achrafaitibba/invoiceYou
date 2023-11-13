@@ -1,7 +1,9 @@
 package com.onxshield.invoiceyou.invoicestatement.exceptions;
 
+import lombok.Getter;
 import org.springframework.http.HttpStatus;
 
+@Getter
 public class requestException extends RuntimeException{
 
     private HttpStatus httpStatus;
@@ -14,7 +16,4 @@ public class requestException extends RuntimeException{
         this.httpStatus = httpStatus;
     }
 
-    public HttpStatus getHttpStatus(){
-        return httpStatus;
-    }
 }
