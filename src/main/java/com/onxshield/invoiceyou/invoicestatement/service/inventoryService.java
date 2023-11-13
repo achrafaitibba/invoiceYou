@@ -1,6 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.service;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.productRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.inventoryResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.productResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.inventory;
@@ -96,5 +97,25 @@ public class inventoryService {
             productRepository.deleteById(id);
             return 1;
         }else throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);
+    }
+
+    public List<inventoryResponse> getInventory() {
+        return inventoryRepository.findAll().stream()
+                .map(
+                        inventory -> new inventoryResponse(
+                                new productResponse(
+                                        inventory.getProduct().getProductId(),
+                                        inventory.getProduct().getName(),
+                                        inventory.getProduct().getUnit().toString(),
+                                        inventory.getProduct().getCategoryList()
+                                ),
+                                inventory.getInventoryId(),
+                                inventory.getAvailability(),
+                                inventory.getBuyPrice(),
+                                inventory.getSellPrice()
+
+                        )
+                )
+                .toList();
     }
 }

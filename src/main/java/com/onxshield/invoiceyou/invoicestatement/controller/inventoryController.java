@@ -1,6 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.productRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.inventoryResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.productResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.category;
 import com.onxshield.invoiceyou.invoicestatement.model.unit;
@@ -12,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/v1/inventory")
+@RequestMapping("/api/v1/inventories")
 @RequiredArgsConstructor
 public class inventoryController {
 
@@ -53,4 +54,11 @@ public class inventoryController {
 
         return ResponseEntity.ok(inventoryService.deleteProduct(id));
     }
+
+    @GetMapping
+    public ResponseEntity<List<inventoryResponse>> getInventory(){
+        return ResponseEntity.ok(inventoryService.getInventory());
+    }
+
+ 
 }
