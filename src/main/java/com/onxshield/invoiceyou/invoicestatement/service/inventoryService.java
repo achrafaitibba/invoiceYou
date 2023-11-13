@@ -8,6 +8,7 @@ import com.onxshield.invoiceyou.invoicestatement.model.product;
 import com.onxshield.invoiceyou.invoicestatement.model.unit;
 import com.onxshield.invoiceyou.invoicestatement.repository.inventoryRepository;
 import com.onxshield.invoiceyou.invoicestatement.repository.productRepository;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class inventoryService {
 
     private final productRepository productRepository;
@@ -84,6 +86,15 @@ public class inventoryService {
                     toUpdate.get().getCategoryList()
 
             );
+        }else throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);
+    }
+
+    public Integer deleteProduct(Long id) {
+        Optional<product> toRemove = productRepository.findById(id);
+        if(toRemove.isPresent()){
+            inventoryRepository.deleteByProductProductId(id);
+            productRepository.deleteById(id);
+            return 1;
         }else throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);
     }
 }
