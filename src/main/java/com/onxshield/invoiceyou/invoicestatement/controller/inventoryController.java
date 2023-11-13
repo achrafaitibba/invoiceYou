@@ -9,6 +9,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/inventory")
 @RequiredArgsConstructor
@@ -25,6 +27,10 @@ public class inventoryController {
         return ResponseEntity.ok(unit.values());
     }
 
+    @GetMapping("/products")
+    public ResponseEntity<List<productResponse>> getAllProducts(){
+        return ResponseEntity.ok(inventoryService.getAllProducts());
+    }
     @PostMapping("/products/add")
     public ResponseEntity<productResponse> createProduct(@RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService.createProduct(request));

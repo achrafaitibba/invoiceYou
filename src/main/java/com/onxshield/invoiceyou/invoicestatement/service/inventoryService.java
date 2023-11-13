@@ -12,6 +12,7 @@ import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContain
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -42,4 +43,13 @@ public class inventoryService {
     }
 
 
+    public List<productResponse> getAllProducts() {
+        return productRepository.findAll().stream()
+                .map(product -> new productResponse(
+                        product.getProductId(),
+                        product.getName(),
+                        product.getUnit().toString(),
+                        product.getCategoryList()
+                )).toList();
+    }
 }
