@@ -57,9 +57,13 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.deleteProduct(id));
     }
 
-    @GetMapping
+    @GetMapping("/all")
     public ResponseEntity<List<inventoryResponse>> getInventory(){
         return ResponseEntity.ok(inventoryService.getInventory());
+    }
+    @GetMapping("/all/{productId}")
+    public ResponseEntity<inventoryResponse> getProductInventory(@PathVariable Long productId){
+        return ResponseEntity.ok(inventoryService.getProductInventory(productId));
     }
 
     @PutMapping("/{productId}")

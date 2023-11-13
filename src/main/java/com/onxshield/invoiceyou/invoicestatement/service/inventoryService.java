@@ -148,4 +148,25 @@ public class inventoryService {
     }
 
 
+    public inventoryResponse getProductInventory(Long productId) {
+        Optional<product> product = productRepository.findById(productId);
+        if(product.isPresent()){
+            Optional<inventory> inventory = inventoryRepository.findByProductProductId(productId);
+            return new inventoryResponse(
+                    new productResponse(
+                            productId,
+                            product.get().getName(),
+                            product.get().getUnit().toString(),
+                            product.get().getCategoryList()
+                    ),
+                    inventory.get().getInventoryId(),
+                    inventory.get().getAvailability(),
+                    inventory.get().getBuyPrice(),
+                    inventory.get().getSellPrice()
+
+
+            );
+        }
+        else throw new requestException("Product doesn't exit with id:"+productId, HttpStatus.NOT_FOUND);
+    }
 }
