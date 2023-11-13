@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.service;
 
+import com.onxshield.invoiceyou.invoicestatement.dto.request.inventoryRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.productRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.inventoryResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.productResponse;
@@ -58,7 +59,7 @@ public class inventoryService {
                 )).toList();
     }
 
-    public productResponse getProductByIdc(Long id) {
+    public productResponse getProductById(Long id) {
         Optional<product> toFind = productRepository.findById(id);
         if(toFind.isPresent()){
             return new productResponse(
@@ -118,4 +119,33 @@ public class inventoryService {
                 )
                 .toList();
     }
+
+    public inventoryResponse updateProductInventory(Long productId, inventoryRequest request) {
+        Optional<product> product = productRepository.findById(productId);
+        if(product.isPresent()){
+            Optional<inventory> inventory = inventoryRepository.findByProductProductId(productId);
+            inventory.get().setAvailability(request.availability());
+            inventory.get().setBuyPrice(request.buyPrice());
+            inventory.get().setSellPrice(request.sellPrice());
+            inventoryRepository.save(inventory.get());
+            return new inventoryResponse(
+                    new productResponse(
+                            productId,
+                            product.get().getName(),
+                            product.get().getUnit().toString(),
+                            product.get().getCategoryList()
+                    ),
+                    inventory.get().getInventoryId(),
+                    inventory.get().getAvailability(),
+                    inventory.get().getBuyPrice(),
+                    inventory.get().getSellPrice()
+
+
+            );
+        }else {
+            throw new requestException("Product doesn't exit with id:"+productId, HttpStatus.NOT_FOUND);
+        }
+    }
+
+
 }

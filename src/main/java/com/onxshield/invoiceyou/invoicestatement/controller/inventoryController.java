@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
+import com.onxshield.invoiceyou.invoicestatement.dto.request.inventoryRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.productRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.inventoryResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.productResponse;
@@ -32,13 +33,16 @@ public class inventoryController {
     public ResponseEntity<List<productResponse>> getAllProducts(){
         return ResponseEntity.ok(inventoryService.getAllProducts());
     }
+
+
+
     @PostMapping("/products/add")
     public ResponseEntity<productResponse> createProduct(@RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService.createProduct(request));
     }
     @GetMapping("/products/{id}")
     public ResponseEntity<productResponse> getProductById(@PathVariable Long id){
-        return ResponseEntity.ok(inventoryService.getProductByIdc(id));
+        return ResponseEntity.ok(inventoryService.getProductById(id));
 
     }
 
@@ -60,5 +64,9 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.getInventory());
     }
 
- 
+    @PutMapping("/{productId}")
+    public ResponseEntity<inventoryResponse> updateProductInventory(@PathVariable Long productId,
+                                                                    @RequestBody inventoryRequest request){
+        return ResponseEntity.ok(inventoryService.updateProductInventory(productId, request));
+    }
 }
