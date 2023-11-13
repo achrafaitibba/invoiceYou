@@ -69,4 +69,21 @@ public class inventoryService {
             throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);        }
 
     }
+
+    public productResponse updateProduct(Long id, productRequest request) {
+        Optional<product> toUpdate = productRepository.findById(id);
+        if(toUpdate.isPresent()){
+            toUpdate.get().setName(request.name());
+            toUpdate.get().setUnit(unit.valueOf(request.unit()));
+            toUpdate.get().setCategoryList(Arrays.toString(request.categories()));
+            productRepository.save(toUpdate.get());
+            return new productResponse(
+                    id,
+                    toUpdate.get().getName(),
+                    toUpdate.get().getUnit().toString(),
+                    toUpdate.get().getCategoryList()
+
+            );
+        }else throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);
+    }
 }

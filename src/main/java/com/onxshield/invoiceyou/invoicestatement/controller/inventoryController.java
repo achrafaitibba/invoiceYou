@@ -40,4 +40,11 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.getProductByIdc(id));
 
     }
+
+    @PutMapping("/products/update/{id}")
+    public ResponseEntity<productResponse> updateProduct(@PathVariable Long id,
+            @RequestBody productRequest request){
+
+        return ResponseEntity.ok(inventoryService.updateProduct(id, request));
+    }
 }
