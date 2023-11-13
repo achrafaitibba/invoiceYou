@@ -93,8 +93,7 @@ public class invoiceService {
         //check the price level
 
         int generatedCount = 0;
-        List<String> categories = Arrays.asList(requestDetails.getCategory().split(", "));
-        double targetedTotal = 0d;
+        double targetedTotal = 0;
         //categorizing products by price range;
         // ranges of invoices
         //        // 1,000DH to 5,000DH
@@ -125,7 +124,7 @@ public class invoiceService {
 
         if(requestDetails.getTotalTTC()<=5000){ //use pL1
 
-            while(targetedTotal<=requestDetails.getTotalTTC()+1.5 & targetedTotal>=requestDetails.getTotalTTC()+1){
+            while(targetedTotal<=requestDetails.getTotalTTC()+0.5 & targetedTotal>=requestDetails.getTotalTTC()+1.2){
 
 
 

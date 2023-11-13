@@ -54,7 +54,6 @@ public class invoice {
     private Date paymentDate;
 
     @OneToMany
-
     private List<merchandise> merchandiseList;
 
     private Boolean printed = false;
