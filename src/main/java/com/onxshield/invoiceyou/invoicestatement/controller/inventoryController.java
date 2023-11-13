@@ -34,8 +34,6 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.getAllProducts());
     }
 
-
-
     @PostMapping("/products/add")
     public ResponseEntity<productResponse> createProduct(@RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService.createProduct(request));
