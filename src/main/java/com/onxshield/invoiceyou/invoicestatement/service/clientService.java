@@ -51,4 +51,14 @@ public class clientService {
             throw new requestException("The id you provided doesn't exist.", HttpStatus.CONFLICT);
         }
     }
+
+    public Integer deleteClient(Long id) {
+        Optional<client> toDelete = clientRepository.findById(id);
+        if(toDelete.isPresent()){
+            clientRepository.deleteById(id);
+            return 1;
+        }else {
+            throw new requestException("The id you provided doesn't exist.", HttpStatus.CONFLICT);
+        }
+    }
 }

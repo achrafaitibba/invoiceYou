@@ -24,6 +24,11 @@ public class clientController {
                                                        @RequestBody clientRequest request){
         return ResponseEntity.ok(clientService.updateClient(id, request));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<Integer> deleteClient(@PathVariable Long id){
+        return ResponseEntity.ok(clientService.deleteClient(id));
+    }
     @GetMapping()
     public ResponseEntity<List<clientResponse>> allClient(){
         return ResponseEntity.ok(clientService.allClients());
