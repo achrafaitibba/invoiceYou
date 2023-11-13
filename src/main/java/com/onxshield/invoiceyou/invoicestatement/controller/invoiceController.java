@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
+import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import com.onxshield.invoiceyou.invoicestatement.model.status;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -13,5 +14,10 @@ public class invoiceController {
     @GetMapping("/status")
     public ResponseEntity<status[]> allStatus(){
         return ResponseEntity.ok(status.values());
+    }
+
+    @GetMapping("/payMethods")
+    public ResponseEntity<paymentMethod[]> paymentMethods(){
+        return ResponseEntity.ok(paymentMethod.values());
     }
 }
