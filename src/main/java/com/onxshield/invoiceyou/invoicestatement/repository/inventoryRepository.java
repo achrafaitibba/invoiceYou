@@ -7,5 +7,4 @@ import java.util.Optional;
 
 public interface inventoryRepository extends JpaRepository<inventory, Long> {
 
-     Optional<inventory> findByProductProductId(Long id);
 }
