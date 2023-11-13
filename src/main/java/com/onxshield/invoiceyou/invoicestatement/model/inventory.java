@@ -14,11 +14,9 @@ import lombok.NoArgsConstructor;
 @Entity
 public class inventory {
     @Id
-    @Column(name = "fk_product_id")
+    @GeneratedValue
     private Long inventoryId;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "fk_product_id", referencedColumnName = "product_id", unique = true)
+    @OneToOne
     private product product;
     private Double availability = 0D;
     private Double buyPrice = 0D;

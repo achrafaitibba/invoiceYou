@@ -32,7 +32,6 @@ public class inventoryService {
         );
         inventory inventory = new inventory();
         inventory.setProduct(productToSave);
-        inventory.setInventoryId(productToSave.getProductId());
         inventoryRepository.save(inventory);
         return new productResponse(
                 productToSave.getProductId(),
