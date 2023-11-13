@@ -1,9 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -22,7 +19,7 @@ public class client {
 
     @Id
     @Column(name = "client_id")
-    @GeneratedValue
+    @GeneratedValue()
     private Long clientId;
     @NotNull
     private String name;
