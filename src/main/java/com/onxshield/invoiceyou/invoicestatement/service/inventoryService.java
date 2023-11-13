@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.productRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.productResponse;
+import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.inventory;
 import com.onxshield.invoiceyou.invoicestatement.model.product;
 import com.onxshield.invoiceyou.invoicestatement.model.unit;
@@ -9,6 +10,7 @@ import com.onxshield.invoiceyou.invoicestatement.repository.inventoryRepository;
 import com.onxshield.invoiceyou.invoicestatement.repository.productRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.util.Arrays;
@@ -51,5 +53,20 @@ public class inventoryService {
                         product.getUnit().toString(),
                         product.getCategoryList()
                 )).toList();
+    }
+
+    public productResponse getProductByIdc(Long id) {
+        Optional<product> toFind = productRepository.findById(id);
+        if(toFind.isPresent()){
+            return new productResponse(
+                    toFind.get().getProductId(),
+                    toFind.get().getName(),
+                    toFind.get().getUnit().toString(),
+                    toFind.get().getCategoryList()
+
+            );
+        }else {
+            throw new requestException("The id you provided doesn't exist.", HttpStatus.NOT_FOUND);        }
+
     }
 }

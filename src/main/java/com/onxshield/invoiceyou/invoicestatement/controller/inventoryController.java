@@ -35,4 +35,9 @@ public class inventoryController {
     public ResponseEntity<productResponse> createProduct(@RequestBody productRequest request){
         return ResponseEntity.ok(inventoryService.createProduct(request));
     }
+    @GetMapping("/products/{id}")
+    public ResponseEntity<productResponse> getProductById(@PathVariable Long id){
+        return ResponseEntity.ok(inventoryService.getProductByIdc(id));
+
+    }
 }
