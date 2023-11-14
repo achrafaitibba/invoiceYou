@@ -14,8 +14,7 @@ public record basicInvoiceRequest(
         String paymentMethod,
         Integer checkNumber,
         List<merchandiseRequest> merchandiseList,
-        Double discount,
-        Long totalTTC
+        Double discount
 
 ) {
 }
