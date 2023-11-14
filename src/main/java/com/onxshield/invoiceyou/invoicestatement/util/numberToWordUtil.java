@@ -154,7 +154,7 @@ public class numberToWordUtil {
 
     public static String convert(long number) {
         // 0 � 999 999 999 999
-        if (number == 0) { return "zéro"; }
+        if (number == 0) { return "ZERO"; }
 
         String snumber = Long.toString(number);
 
@@ -179,11 +179,11 @@ public class numberToWordUtil {
                 break;
             case 1 :
                 tradMilliards = convertLessThanOneThousand(lesMilliards)
-                        + " milliard ";
+                        + " MILLIARD ";
                 break;
             default :
                 tradMilliards = convertLessThanOneThousand(lesMilliards)
-                        + " milliards ";
+                        + " MILLIARDS ";
         }
         String resultat =  tradMilliards;
 
@@ -194,11 +194,11 @@ public class numberToWordUtil {
                 break;
             case 1 :
                 tradMillions = convertLessThanOneThousand(lesMillions)
-                        + " million ";
+                        + " MILLION ";
                 break;
             default :
                 tradMillions = convertLessThanOneThousand(lesMillions)
-                        + " millions ";
+                        + " MILLIONS ";
         }
         resultat =  resultat + tradMillions;
 
@@ -208,11 +208,11 @@ public class numberToWordUtil {
                 tradCentMille = "";
                 break;
             case 1 :
-                tradCentMille = "mille ";
+                tradCentMille = "MILLE ";
                 break;
             default :
                 tradCentMille = convertLessThanOneThousand(lesCentMille)
-                        + " mille ";
+                        + " MILLE ";
         }
         resultat =  resultat + tradCentMille;
 
@@ -220,6 +220,6 @@ public class numberToWordUtil {
         tradMille = convertLessThanOneThousand(lesMille);
         resultat =  resultat + tradMille;
 
-        return resultat;
+        return resultat.toUpperCase();
     }
 }
