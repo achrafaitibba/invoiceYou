@@ -19,7 +19,7 @@ public class merchandise {
     @GeneratedValue
     private Long merchId;
 
-    @OneToOne
+    @ManyToOne
     @NotNull
     private product product;
 

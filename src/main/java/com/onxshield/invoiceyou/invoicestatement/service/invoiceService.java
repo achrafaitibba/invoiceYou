@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -62,22 +63,28 @@ public class invoiceService {
                 )
                 .toList()
                 ;
+        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+            invoice invoiceToSave = new invoice();
+            invoiceToSave.setInvoiceId(request.invoiceId());
+            invoiceToSave.setInvoiceDate(request.invoiceDate());
+            invoiceToSave.setClient(client.get());
+            invoiceToSave.setTotalTTC(totalTTC.get().longValue());
+            invoiceToSave.setTVA(totalTTC.get() /6);
+            invoiceToSave.setSpelledTotal(convertNumberToWords(totalTTC.get().longValue()));
+            invoiceToSave.setMerchandiseList(merchandiseList);
+            invoiceToSave.setCheckNumber(request.checkNumber());
+            invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
 
-        invoice invoiceToSave = new invoice();
-                invoiceToSave.setInvoiceId(request.invoiceId());
-                invoiceToSave.setInvoiceDate(request.invoiceDate());
-                invoiceToSave.setClient(client.get());
-                invoiceToSave.setTotalTTC(totalTTC.get().longValue());
-                invoiceToSave.setTVA(totalTTC.get() /6);
-                invoiceToSave.setSpelledTotal(convertNumberToWords(totalTTC.get().longValue()));
-                invoiceToSave.setMerchandiseList(merchandiseList);
-                invoiceToSave.setCheckNumber(request.checkNumber());
-                invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
+            return invoiceRepository.save(invoiceToSave);
+        }
+        else {
+            throw new requestException("The Id you provided already used by other invoice",HttpStatus.CONFLICT);
+        }
 
-        return invoiceRepository.save(invoiceToSave);
+
     }
 
     public String convertNumberToWords(Long total) {
-        return numberToWordUtil.convert(total);
+        return numberToWordUtil.convert(total).toUpperCase();
     }
 }
