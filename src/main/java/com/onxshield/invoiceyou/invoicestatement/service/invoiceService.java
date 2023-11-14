@@ -20,7 +20,6 @@ import java.util.concurrent.atomic.AtomicReference;
 public class invoiceService {
 
     private final invoiceRepository invoiceRepository;
-    private final inventoryService inventoryService;
     private final clientRepository clientRepository;
     private final inventoryRepository inventoryRepository;
     private final productRepository productRepository;
@@ -70,7 +69,7 @@ public class invoiceService {
                 invoiceToSave.setClient(client.get());
                 invoiceToSave.setTotalTTC(totalTTC.get().longValue());
                 invoiceToSave.setTVA(totalTTC.get() /6);
-                invoiceToSave.setSpelledTotal(numberToWordUtil.convert(totalTTC.get().longValue()));
+                invoiceToSave.setSpelledTotal(convertNumberToWords(totalTTC.get().longValue()));
                 invoiceToSave.setMerchandiseList(merchandiseList);
                 invoiceToSave.setCheckNumber(request.checkNumber());
                 invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
@@ -78,4 +77,7 @@ public class invoiceService {
         return invoiceRepository.save(invoiceToSave);
     }
 
+    public String convertNumberToWords(Long total) {
+        return numberToWordUtil.convert(total);
+    }
 }

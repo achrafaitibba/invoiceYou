@@ -35,6 +35,12 @@ public class invoiceController {
     @PostMapping("/basic/create")
     public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
         return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
-
     }
+
+    @GetMapping("/convertNumber/{total}")
+    public ResponseEntity<String> convertNumberToWords(@PathVariable Long total){
+        return ResponseEntity.ok(invoiceService.convertNumberToWords(total));
+    }
+
+
 }
