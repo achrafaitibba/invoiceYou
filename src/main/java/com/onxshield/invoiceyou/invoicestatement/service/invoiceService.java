@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
@@ -149,25 +150,33 @@ public class invoiceService {
         return invoiceRepository.findAll();
     }
 
-    public invoice updateInvoiceById(invoice request) { //todo more work to do (update other entities..."
-        Optional<invoice> invoice = Optional.ofNullable(getInvoiceById(request.getInvoiceId()));
-        if(invoice.isPresent()) {
-            invoice.get().setInvoiceDate(request.getInvoiceDate());
-            invoice.get().setClient(request.getClient());
-            invoice.get().setTotalTTC(request.getTotalTTC());
-            invoice.get().setSpelledTotal(numberToWordUtil.convert(request.getTotalTTC()));
-            invoice.get().setTVA(request.getTVA());
-            invoice.get().setPaymentMethod(request.getPaymentMethod());
-            invoice.get().setBankName(request.getBankName());
-            invoice.get().setDiscount(request.getDiscount());
-            invoice.get().setCheckNumber(request.getCheckNumber());
-            invoice.get().setPaymentDate(request.getPaymentDate());
-            invoice.get().setMerchandiseList(request.getMerchandiseList());
-            invoice.get().setPrinted(request.getPrinted());
-            invoice.get().setInvoiceAction(request.getInvoiceAction());
-            invoice.get().setInvoiceStatus(request.getInvoiceStatus());
-            invoice.get().setInvoiceFile(request.getInvoiceFile());
-            return invoiceRepository.save(invoice.get());
-        }else throw new requestException("Id doesn't exist",HttpStatus.NOT_FOUND);
+
+    public invoice updateInvoiceById(invoice request) {
+        //to update invoice
+        //find it
+        //find then update client
+        //find then update merchandiseList
+        //then update the invoice
+        //none basic Invoice doesn't have merchandiseList
+        return null;
+    }
+
+    public invoice createInvoice(invoiceRequest request) {
+        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+            invoice invoice = new invoice();
+            invoice.setInvoiceId(request.invoiceId());
+            invoice.setInvoiceDate(request.invoiceDate());
+            invoice.setClient(clientRepository.findById(request.clientId()).get());
+            invoice.setTotalTTC(request.totalTTC());
+            invoice.setSpelledTotal(numberToWordUtil.convert(request.totalTTC()));
+            invoice.setTVA(request.totalTTC().doubleValue()/6);
+            invoice.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
+            invoice.setBankName(request.bankName());
+            invoice.setCheckNumber(request.checkNumber());
+            invoice.setPaymentDate(request.paymentDate());
+
+            return invoiceRepository.save(invoice);
+        }
+        else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
     }
 }
