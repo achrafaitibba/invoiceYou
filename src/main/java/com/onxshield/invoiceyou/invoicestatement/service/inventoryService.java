@@ -12,7 +12,6 @@ import com.onxshield.invoiceyou.invoicestatement.repository.inventoryRepository;
 import com.onxshield.invoiceyou.invoicestatement.repository.productRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.boot.autoconfigure.amqp.AbstractRabbitListenerContainerFactoryConfigurer;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 

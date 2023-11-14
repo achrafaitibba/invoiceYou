@@ -150,17 +150,6 @@ public class invoiceService {
         return invoiceRepository.findAll();
     }
 
-
-    public invoice updateInvoiceById(invoice request) {
-        //to update invoice
-        //find it
-        //find then update client
-        //find then update merchandiseList
-        //then update the invoice
-        //none basic Invoice doesn't have merchandiseList
-        return null;
-    }
-
     public invoice createInvoice(invoiceRequest request) {
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
             invoice invoice = new invoice();
@@ -178,5 +167,15 @@ public class invoiceService {
             return invoiceRepository.save(invoice);
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
+    }
+
+    public invoice updateInvoiceById(invoice request) {
+        //to update invoice
+        //find it
+        //find then update client
+        //find then update merchandiseList
+        //then update the invoice
+        //none basic Invoice doesn't have merchandiseList
+        return null;
     }
 }
