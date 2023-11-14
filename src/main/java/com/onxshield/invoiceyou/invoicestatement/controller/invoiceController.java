@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/invoices")
 @RequiredArgsConstructor
@@ -32,11 +34,6 @@ public class invoiceController {
         return ResponseEntity.ok(action.values());
     }
 
-    @PostMapping("/basic/create")
-    public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
-        return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
-    }
-
     @GetMapping("/convertNumber/{total}")
     public ResponseEntity<String> convertNumberToWords(@PathVariable Long total){
         return ResponseEntity.ok(invoiceService.convertNumberToWords(total));
@@ -52,16 +49,28 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.generateInvoiceNumber());
     }
 
-    @GetMapping("/{invoiceId}")
-    public ResponseEntity<invoice> getInvoiceById(@PathVariable String invoiceId){
-        return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
-    }
 
+
+    @PostMapping("/basic/create")
+    public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
+        return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
+    }
 
     @GetMapping("/basic/{invoiceId}")
     public ResponseEntity<basicInvoiceResponse> getBasicInvoiceById(@PathVariable String invoiceId){
         return ResponseEntity.ok(invoiceService.getBasicInvoiceById(invoiceId));
     }
 
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity<invoice> getInvoiceById(@PathVariable String invoiceId){
+        return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<invoice>> getAllInvoices(){
+        return ResponseEntity.ok(invoiceService.getAllInvoices());
+    }
+
+    
 
 }

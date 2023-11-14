@@ -15,9 +15,7 @@ import org.springframework.stereotype.Service;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -145,5 +143,9 @@ public class invoiceService {
                 invoice.getCheckNumber(),
                 invoice.getDiscount()
         );
+    }
+
+    public List<invoice> getAllInvoices() {
+        return invoiceRepository.findAll();
     }
 }
