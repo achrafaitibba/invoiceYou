@@ -27,6 +27,6 @@ public class merchandise {
     private Double quantity;
 
     @NotNull
-    private Double total; //todo product_sell price * quantity
+    private Double total;
 
 }

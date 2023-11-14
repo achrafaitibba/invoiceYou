@@ -40,7 +40,7 @@ public class invoice {
     private Long totalTTC;
 
     @NotNull
-    private String spelledTotal; //todo live conversion endpoint
+    private String spelledTotal;
 
     private Double TVA; //todo live conversion endpoint
 
@@ -52,7 +52,7 @@ public class invoice {
 
     private Double discount;
 
-    private Integer checkNumber; //todo could be null if paymentMethod = VIR/ESP
+    private Integer checkNumber;
 
     @Temporal(TemporalType.DATE)
     private Date paymentDate;

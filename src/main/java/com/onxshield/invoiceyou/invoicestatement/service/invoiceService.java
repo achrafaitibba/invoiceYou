@@ -148,4 +148,26 @@ public class invoiceService {
     public List<invoice> getAllInvoices() {
         return invoiceRepository.findAll();
     }
+
+    public invoice updateInvoiceById(invoice request) { //todo more work to do (update other entities..."
+        Optional<invoice> invoice = Optional.ofNullable(getInvoiceById(request.getInvoiceId()));
+        if(invoice.isPresent()) {
+            invoice.get().setInvoiceDate(request.getInvoiceDate());
+            invoice.get().setClient(request.getClient());
+            invoice.get().setTotalTTC(request.getTotalTTC());
+            invoice.get().setSpelledTotal(numberToWordUtil.convert(request.getTotalTTC()));
+            invoice.get().setTVA(request.getTVA());
+            invoice.get().setPaymentMethod(request.getPaymentMethod());
+            invoice.get().setBankName(request.getBankName());
+            invoice.get().setDiscount(request.getDiscount());
+            invoice.get().setCheckNumber(request.getCheckNumber());
+            invoice.get().setPaymentDate(request.getPaymentDate());
+            invoice.get().setMerchandiseList(request.getMerchandiseList());
+            invoice.get().setPrinted(request.getPrinted());
+            invoice.get().setInvoiceAction(request.getInvoiceAction());
+            invoice.get().setInvoiceStatus(request.getInvoiceStatus());
+            invoice.get().setInvoiceFile(request.getInvoiceFile());
+            return invoiceRepository.save(invoice.get());
+        }else throw new requestException("Id doesn't exist",HttpStatus.NOT_FOUND);
+    }
 }

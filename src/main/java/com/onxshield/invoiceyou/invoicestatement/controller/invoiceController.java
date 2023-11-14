@@ -71,6 +71,9 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
-    
+    @PutMapping("/update")
+    public ResponseEntity<invoice> updateInvoiceById(@RequestBody invoice request){
+        return ResponseEntity.ok(invoiceService.updateInvoiceById(request));
+    }
 
 }
