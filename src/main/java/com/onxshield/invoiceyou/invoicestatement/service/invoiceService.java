@@ -10,6 +10,7 @@ import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.Year;
 import java.util.List;
 import java.util.Optional;
 import java.util.Random;
@@ -27,6 +28,7 @@ public class invoiceService {
     private final productRepository productRepository;
     private final merchandiseRepository merchandiseRepository;
     private final invoiceNumberRepository invoiceNumberRepository;
+    static long latestInvoiceNumber = 1225;
     public invoice createBasicInvoice(basicInvoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D); //todo what's this ? suggested by IDE, and it works fine hh
@@ -94,5 +96,16 @@ public class invoiceService {
                 .map(invoiceNumber::getInvoiceNumber)
                 .toList();
         return numbers.toArray(new String[0]);
+    }
+
+    public String generateInvoiceNumber() {
+        int currentYear = Year.now().getValue();
+        int lastTwoDigits = currentYear % 100;
+        latestInvoiceNumber++;
+        String toSave = "ST"+latestInvoiceNumber+"/"+String.format("%02d", lastTwoDigits);
+        invoiceNumberRepository.save(new invoiceNumber(toSave));
+        latestInvoiceNumber++;
+        return "ST"+latestInvoiceNumber+"/"+String.format("%02d", lastTwoDigits);
+
     }
 }
