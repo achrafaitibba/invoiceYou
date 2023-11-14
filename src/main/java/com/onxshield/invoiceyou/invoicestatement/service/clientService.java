@@ -24,7 +24,7 @@ public class clientService {
                 client
                         .builder()
                         .name(request.name())
-                        .ICE(request.ICE())
+                        .ICE(request.ICE() == null ? 0 : request.ICE())
                         .build());
         return new clientResponse(toSave.getClientId(),toSave.getName(),toSave.getICE());
     }
