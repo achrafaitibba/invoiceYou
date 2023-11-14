@@ -3,6 +3,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.*;
 import com.onxshield.invoiceyou.invoicestatement.repository.*;
@@ -119,6 +120,28 @@ public class invoiceService {
     }
 
     public basicInvoiceResponse getBasicInvoiceById(String invoiceId) {
-        return null;
+        invoice invoice = getInvoiceById(invoiceId);
+        return new basicInvoiceResponse(
+                invoice.getClient().getName(),
+                invoice.getInvoiceId(),
+                invoice.getClient().getICE(),
+                invoice.getInvoiceDate(),
+                invoice.getMerchandiseList().stream().map(
+
+                        merchandise -> new merchandiseResponse(
+                                merchandise.getProduct().getName(),
+                                merchandise.getProduct().getUnit().toString(),
+                                merchandise.getQuantity(),
+                                inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice(),
+                                merchandise.getQuantity().longValue() * inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice().longValue()
+                        )
+                )
+                        .toList(),
+                invoice.getTotalTTC(),
+                invoice.getTVA(),
+                invoice.getSpelledTotal(),
+                invoice.getPaymentMethod().toString(),
+                invoice.getCheckNumber()
+        );
     }
 }
