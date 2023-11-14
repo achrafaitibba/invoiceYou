@@ -1,6 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
@@ -49,6 +50,17 @@ public class invoiceController {
     @GetMapping("/generateInvoiceNumber")
     public ResponseEntity<String> generateNewInvoiceNumber(){
         return ResponseEntity.ok(invoiceService.generateInvoiceNumber());
+    }
+
+    @GetMapping("/{invoiceId}")
+    public ResponseEntity<invoice> getInvoiceById(@PathVariable String invoiceId){
+        return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
+    }
+
+
+    @GetMapping("/basic/{invoiceId}")
+    public ResponseEntity<basicInvoiceResponse> getBasicInvoiceById(@PathVariable String invoiceId){
+        return ResponseEntity.ok(invoiceService.getBasicInvoiceById(invoiceId));
     }
 
 

@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.*;
 import com.onxshield.invoiceyou.invoicestatement.repository.*;
@@ -107,5 +108,17 @@ public class invoiceService {
         latestInvoiceNumber++;
         return "ST"+latestInvoiceNumber+"/"+String.format("%02d", lastTwoDigits);
 
+    }
+
+    public invoice getInvoiceById(String invoiceId) {
+        Optional<invoice> invoice = invoiceRepository.findById(invoiceId);
+        if (invoice.isPresent()){
+            return invoice.get();
+        }
+        else throw new requestException("The Id you provided doesn't exist",HttpStatus.CONFLICT);
+    }
+
+    public basicInvoiceResponse getBasicInvoiceById(String invoiceId) {
+        return null;
     }
 }
