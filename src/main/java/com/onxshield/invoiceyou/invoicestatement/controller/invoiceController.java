@@ -42,5 +42,10 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.convertNumberToWords(total));
     }
 
+    @GetMapping("/availableInvoiceNumbers")
+    public ResponseEntity<String[]> getAvailableInvoiceNumbers(){
+        return ResponseEntity.ok(invoiceService.getAvailableInvoiceNumbers());
+    }
+
 
 }

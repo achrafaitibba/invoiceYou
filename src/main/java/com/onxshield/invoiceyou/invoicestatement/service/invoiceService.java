@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -25,8 +26,7 @@ public class invoiceService {
     private final inventoryRepository inventoryRepository;
     private final productRepository productRepository;
     private final merchandiseRepository merchandiseRepository;
-    int i = 0;
-
+    private final invoiceNumberRepository invoiceNumberRepository;
     public invoice createBasicInvoice(basicInvoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D); //todo what's this ? suggested by IDE, and it works fine hh
@@ -86,5 +86,13 @@ public class invoiceService {
 
     public String convertNumberToWords(Long total) {
         return numberToWordUtil.convert(total).toUpperCase();
+    }
+
+    public String[] getAvailableInvoiceNumbers() {
+        List<String> numbers = invoiceNumberRepository.findAll()
+                .stream()
+                .map(invoiceNumber::getInvoiceNumber)
+                .toList();
+        return numbers.toArray(new String[0]);
     }
 }
