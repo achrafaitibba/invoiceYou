@@ -14,7 +14,8 @@ public record basicInvoiceResponse(
         Double TVA,
         String spelledTotal,
         String paymentMethod,
-        Integer checkNumber
+        Integer checkNumber,
+        Double discount
 
 
 ) {

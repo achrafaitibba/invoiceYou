@@ -71,6 +71,7 @@ public class invoiceService {
             invoice invoiceToSave = new invoice();
             invoiceToSave.setInvoiceId(request.invoiceId());
             invoiceToSave.setInvoiceDate(request.invoiceDate());
+            invoiceToSave.setDiscount(request.discount());
             invoiceToSave.setClient(client.get());
             invoiceToSave.setTotalTTC(totalTTC.get().longValue());
             invoiceToSave.setTVA(totalTTC.get() /6);
@@ -141,7 +142,8 @@ public class invoiceService {
                 invoice.getTVA(),
                 invoice.getSpelledTotal(),
                 invoice.getPaymentMethod().toString(),
-                invoice.getCheckNumber()
+                invoice.getCheckNumber(),
+                invoice.getDiscount()
         );
     }
 }

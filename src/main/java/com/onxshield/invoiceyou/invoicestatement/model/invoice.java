@@ -50,6 +50,8 @@ public class invoice {
 
     private String bankName;
 
+    private Double discount;
+
     private Integer checkNumber; //todo could be null if paymentMethod = VIR/ESP
 
     @Temporal(TemporalType.DATE)
