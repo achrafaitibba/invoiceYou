@@ -1,7 +1,9 @@
 package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.invoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
+import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import com.onxshield.invoiceyou.invoicestatement.model.status;
 import com.onxshield.invoiceyou.invoicestatement.service.invoiceService;
@@ -30,9 +32,9 @@ public class invoiceController {
         return ResponseEntity.ok(action.values());
     }
 
-//    @PostMapping("/basic/create")
-//    public ResponseEntity<basicInvoiceResponse> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
-//        return ResponseEntity.ok(invoiceService.createBasicInvoice());
-//
-//    }
+    @PostMapping("/basic/create")
+    public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
+        return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
+
+    }
 }

@@ -1,5 +1,7 @@
 package com.onxshield.invoiceyou.invoicestatement.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -35,7 +37,7 @@ public class invoice {
     private client client;
 
     @NotNull
-    private Double totalTTC;
+    private Long totalTTC;
 
     @NotNull
     private String spelledTotal; //todo live conversion endpoint

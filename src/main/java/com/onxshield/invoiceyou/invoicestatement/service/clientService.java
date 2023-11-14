@@ -61,4 +61,16 @@ public class clientService {
             throw new requestException("The id you provided doesn't exist.", HttpStatus.CONFLICT);
         }
     }
+
+    public clientResponse getClientById(Long clientId) {
+        Optional<client> client = clientRepository.findById(clientId);
+        if(client.isPresent()){
+            return new clientResponse(clientId,
+                    client.get().getName(),
+                    client.get().getICE());
+        }
+        else {
+            throw new requestException("The id you provided doesn't exist.", HttpStatus.CONFLICT);
+        }
+    }
 }

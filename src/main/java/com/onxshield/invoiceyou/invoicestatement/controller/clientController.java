@@ -29,9 +29,15 @@ public class clientController {
     public ResponseEntity<Integer> deleteClient(@PathVariable Long id){
         return ResponseEntity.ok(clientService.deleteClient(id));
     }
+
+
     @GetMapping()
     public ResponseEntity<List<clientResponse>> allClient(){
         return ResponseEntity.ok(clientService.allClients());
     }
 
+    @GetMapping("/{clientId}")
+    public ResponseEntity<clientResponse> getClientById(@PathVariable Long clientId){
+        return ResponseEntity.ok(clientService.getClientById(clientId));
+    }
 }
