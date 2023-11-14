@@ -1,7 +1,5 @@
 package com.onxshield.invoiceyou.invoicestatement.dto.request;
 
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 
 import java.util.Date;
 import java.util.List;
