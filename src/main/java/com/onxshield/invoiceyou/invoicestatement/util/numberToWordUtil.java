@@ -4,6 +4,10 @@ package com.onxshield.invoiceyou.invoicestatement.util;
 import java.text.*;
 
 public class numberToWordUtil {
+
+    //In case someone reading this code (numberToWordUtil)
+    //I just want you to know that I copied this code from a forum, I needed it hh
+    //I can do it, but copying it was easier and faster hehe
     private static final String[] dizaineNames = {
             "",
             "",
