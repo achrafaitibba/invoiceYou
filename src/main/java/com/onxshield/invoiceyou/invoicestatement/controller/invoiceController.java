@@ -51,8 +51,10 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.generateInvoiceNumber());
     }
 
-
-
+    @GetMapping("/TVA/calculate/{total}")
+    public ResponseEntity<Double> calculateTVA(@PathVariable Long total){
+        return ResponseEntity.ok(total.doubleValue()/6);
+    }
     @PostMapping("/basic/create")
     public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
         return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
@@ -82,5 +84,8 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.updateInvoiceById(request));
     }
 
+
+
     
+
 }
