@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.request.updateInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import com.onxshield.invoiceyou.invoicestatement.model.invoice;
@@ -77,8 +78,9 @@ public class invoiceController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<invoice> updateInvoiceById(@RequestBody invoice request){
+    public ResponseEntity<invoice> updateInvoiceById(@RequestBody updateInvoiceRequest request){
         return ResponseEntity.ok(invoiceService.updateInvoiceById(request));
     }
 
+    
 }

@@ -3,6 +3,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.request.updateInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
@@ -169,13 +170,23 @@ public class invoiceService {
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
     }
 
-    public invoice updateInvoiceById(invoice request) {
-        //to update invoice
-        //find it
-        //find then update client
-        //find then update merchandiseList
-        //then update the invoice
-        //none basic Invoice doesn't have merchandiseList
-        return null;
+    public invoice updateInvoiceById(updateInvoiceRequest request) {
+        Optional<invoice> invoice = invoiceRepository.findById(request.basicInvoice().invoiceId());
+        if (invoice.isPresent()){
+            Optional<client> client = clientRepository.findById(request.basicInvoice().clientId());
+            invoice.get().setClient(client.get());
+            invoice.get().setInvoiceDate(request.basicInvoice().invoiceDate());
+            invoice.get().setTotalTTC(request.basicInvoice().totalTTC());
+            invoice.get().setPaymentMethod(paymentMethod.valueOf(request.basicInvoice().paymentMethod()));
+            invoice.get().setBankName(request.basicInvoice().bankName());
+            invoice.get().setCheckNumber(request.basicInvoice().checkNumber());
+            invoice.get().setPaymentDate(request.basicInvoice().paymentDate());
+            invoice.get().setPrinted(request.printed());
+            invoice.get().setInvoiceAction(action.valueOf(request.invoiceAction()));
+            invoice.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
+            invoice.get().setInvoiceFile(request.invoiceFile());
+            return invoiceRepository.save(invoice.get());
+        }else throw
+                new requestException("The invoice id you provided doesn't exist",HttpStatus.NOT_FOUND);
     }
 }
