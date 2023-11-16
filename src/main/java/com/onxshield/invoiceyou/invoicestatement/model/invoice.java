@@ -41,7 +41,7 @@ public class invoice {
     @NotNull
     private String spelledTotal;
 
-    private Double TVA; 
+    private Double TVA;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -64,7 +64,6 @@ public class invoice {
     @Enumerated(EnumType.STRING)
     private action invoiceAction = action.NOT_YET;
 
-    //@Builder.Default //todo , check how this annotation work in docs
     @Enumerated(EnumType.STRING)
     private status invoiceStatus = status.NOT_YET;
 
