@@ -162,10 +162,60 @@ public class invoiceService {
     }
 
     public invoice createInvoice(invoiceRequest request) {
-        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
-            invoice invoice = new invoice();
+        AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
+        List<merchandise> savedMerchandise = new ArrayList<>();
 
-            return invoiceRepository.save(invoice);
+        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+            Optional<client> client = clientRepository.findById(request.clientId());
+            List<merchandise> merchandiseList = request.merchandiseList().stream()
+                    .map(
+
+                            merchandiseRequest -> {
+                                merchandise merchandiseToSave ;
+                                Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
+                                Double availability = inventory.get().getAvailability();
+                                if(availability >= merchandiseRequest.quantity() && availability > 0){
+                                    Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
+                                    totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
+                                    inventory.get().setAvailability(availability - merchandiseRequest.quantity());
+                                    merchandiseToSave = new merchandise();
+                                    merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
+                                    merchandiseToSave.setQuantity(merchandiseRequest.quantity());
+                                    merchandiseToSave.setTotal(totalByProduct);
+                                    savedMerchandise.add(merchandiseToSave);
+                                    return merchandiseRepository.save(merchandiseToSave);
+                                }else {
+                                    throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
+                                }
+                            }
+                    )
+                    .toList()
+                    ;
+            invoice invoiceToSave = invoice.builder()
+                    .invoiceId(request.invoiceId())
+                    .invoiceDate(request.invoiceDate())
+                    .client(client.get())
+                    .totalTTC(request.totalTTC())
+                    .TVA(request.totalTTC().doubleValue()/6)
+                    .spelledTotal(numberToWordUtil.convert(request.totalTTC()))
+                    .paymentMethod(paymentMethod.valueOf(request.paymentMethod()))
+                    .bankName(request.bankName())
+                    .checkNumber(request.checkNumber())
+                    .paymentDate(request.paymentDate())
+                    .printed(Boolean.valueOf(request.printed()))
+                    .invoiceAction(action.valueOf(request.invoiceAction()))
+                    .invoiceStatus(status.valueOf(request.invoiceStatus()))
+                    .invoiceFile(request.invoiceFile())
+                    .merchandiseList(merchandiseList)
+                    .build();
+            invoice saved = invoiceRepository.save(invoiceToSave);
+            for (merchandise merch: savedMerchandise
+            ) {
+                Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
+                toUpdate.get().setInvoice(saved);
+            }
+            return saved;
+
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
     }
