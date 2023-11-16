@@ -32,7 +32,7 @@ public class clientController {
 
 
     @GetMapping()
-    public ResponseEntity<List<clientResponse>> allClient(){
+    public ResponseEntity<List<clientResponse>> allClients(){
         return ResponseEntity.ok(clientService.allClients());
     }
 
