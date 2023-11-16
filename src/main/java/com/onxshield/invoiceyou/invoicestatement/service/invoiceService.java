@@ -1,7 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.service;
 
 
-import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
@@ -15,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -33,10 +31,7 @@ public class invoiceService {
     private final merchandiseRepository merchandiseRepository;
     private final invoiceNumberRepository invoiceNumberRepository;
     static long latestInvoiceNumber = 1225;
-    public invoice createBasicInvoice(basicInvoiceRequest request) {
-        Optional<client> client = clientRepository.findById(request.clientId());
-        AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
-        List<merchandise> savedMerchandise = new ArrayList<>();
+    public invoice createBasicInvoice(invoiceRequest request) {
         //find inventory by product id
         //check availability
         //get the sell price
@@ -44,43 +39,19 @@ public class invoiceService {
         //add the total by product to totalTTC
         //decrease availability in the inventory
         //BUILD the merchandise instances
-        List<merchandise> merchandiseList = request.merchandiseList().stream()
-                .map(
 
-                        merchandiseRequest -> {
-                            merchandise merchandiseToSave ;
-                            Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
-                            Double availability = inventory.get().getAvailability();
-                            if(availability >= merchandiseRequest.quantity() && availability > 0){
-                                Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
-                                totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
-                                inventory.get().setAvailability(availability - merchandiseRequest.quantity());
-                                merchandiseToSave = new merchandise();
-                                merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
-                                merchandiseToSave.setQuantity(merchandiseRequest.quantity());
-                                merchandiseToSave.setTotal(totalByProduct);
-                                savedMerchandise.add(merchandiseToSave);
-                                return merchandiseRepository.save(merchandiseToSave);
-                            }else {
-                                throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
-                            }
-
-
-                        }
-                )
-                .toList()
-                ;
-
+        Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+
+            List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
             invoice invoiceToSave = new invoice();
             invoiceToSave.setInvoiceId(request.invoiceId());
             invoiceToSave.setInvoiceDate(request.invoiceDate());
-            invoiceToSave.setDiscount(request.discount());
             invoiceToSave.setClient(client.get());
-            invoiceToSave.setTotalTTC(totalTTC.get().longValue());
-            invoiceToSave.setTVA(totalTTC.get() /6);
-            invoiceToSave.setSpelledTotal(convertNumberToWords(totalTTC.get().longValue()));
-            invoiceToSave.setMerchandiseList(merchandiseList);
+            invoiceToSave.setTotalTTC(request.totalTTC());
+            invoiceToSave.setTVA(request.totalTTC().doubleValue() /6);
+            invoiceToSave.setSpelledTotal(convertNumberToWords(request.totalTTC().longValue()));
+            invoiceToSave.setMerchandiseList(savedMerchandise);
             invoiceToSave.setCheckNumber(request.checkNumber());
             invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
             invoice saved = invoiceRepository.save(invoiceToSave);
@@ -94,8 +65,6 @@ public class invoiceService {
         else {
             throw new requestException("The Id you provided already used by other invoice",HttpStatus.CONFLICT);
         }
-
-
     }
 
     public String convertNumberToWords(Long total) {
@@ -161,36 +130,37 @@ public class invoiceService {
         return invoiceRepository.findAll();
     }
 
-    public invoice createInvoice(invoiceRequest request) {
+    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
-        List<merchandise> savedMerchandise = new ArrayList<>();
+        return request.merchandiseList().stream()
+                .map(
 
-        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
-            Optional<client> client = clientRepository.findById(request.clientId());
-            List<merchandise> merchandiseList = request.merchandiseList().stream()
-                    .map(
-
-                            merchandiseRequest -> {
-                                merchandise merchandiseToSave ;
-                                Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
-                                Double availability = inventory.get().getAvailability();
-                                if(availability >= merchandiseRequest.quantity() && availability > 0){
-                                    Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
-                                    totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
-                                    inventory.get().setAvailability(availability - merchandiseRequest.quantity());
-                                    merchandiseToSave = new merchandise();
-                                    merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
-                                    merchandiseToSave.setQuantity(merchandiseRequest.quantity());
-                                    merchandiseToSave.setTotal(totalByProduct);
-                                    savedMerchandise.add(merchandiseToSave);
-                                    return merchandiseRepository.save(merchandiseToSave);
-                                }else {
-                                    throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
-                                }
+                        merchandiseRequest -> {
+                            merchandise merchandiseToSave ;
+                            Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
+                            Double availability = inventory.get().getAvailability();
+                            if(availability >= merchandiseRequest.quantity() && availability > 0){
+                                Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
+                                totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
+                                inventory.get().setAvailability(availability - merchandiseRequest.quantity());
+                                merchandiseToSave = new merchandise();
+                                merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
+                                merchandiseToSave.setQuantity(merchandiseRequest.quantity());
+                                merchandiseToSave.setTotal(totalByProduct);
+                                return merchandiseRepository.save(merchandiseToSave);
+                            }else {
+                                throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
                             }
-                    )
-                    .toList()
-                    ;
+                        }
+                )
+                .toList();
+    }
+
+    public invoice createInvoice(invoiceRequest request) {
+        //AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
+        Optional<client> client = clientRepository.findById(request.clientId());
+        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+            List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
             invoice invoiceToSave = invoice.builder()
                     .invoiceId(request.invoiceId())
                     .invoiceDate(request.invoiceDate())
@@ -206,7 +176,7 @@ public class invoiceService {
                     .invoiceAction(action.valueOf(request.invoiceAction()))
                     .invoiceStatus(status.valueOf(request.invoiceStatus()))
                     .invoiceFile(request.invoiceFile())
-                    .merchandiseList(merchandiseList)
+                    .merchandiseList(savedMerchandise)
                     .build();
             invoice saved = invoiceRepository.save(invoiceToSave);
             for (merchandise merch: savedMerchandise
@@ -215,7 +185,6 @@ public class invoiceService {
                 toUpdate.get().setInvoice(saved);
             }
             return saved;
-
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
     }

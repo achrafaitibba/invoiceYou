@@ -7,7 +7,7 @@ public record invoiceRequest(
 
         String invoiceId,
         Date invoiceDate,
-        Long clientId,
+        Long clientId, // noo
         Long totalTTC,
         String paymentMethod,
         String bankName,
