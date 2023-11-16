@@ -34,7 +34,7 @@ public class invoiceService {
     static long latestInvoiceNumber = 1225;
     public invoice createBasicInvoice(basicInvoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
-        AtomicReference<Double> totalTTC = new AtomicReference<>(0D); //todo what's this ? suggested by IDE, and it works fine hh
+        AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
 
         //find inventory by product id
         //check availability
