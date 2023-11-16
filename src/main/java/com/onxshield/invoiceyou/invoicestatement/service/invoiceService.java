@@ -3,13 +3,13 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
-import com.onxshield.invoiceyou.invoicestatement.dto.request.updateInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.*;
 import com.onxshield.invoiceyou.invoicestatement.repository.*;
 import com.onxshield.invoiceyou.invoicestatement.util.numberToWordUtil;
+import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -22,6 +22,7 @@ import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
+@Transactional
 public class invoiceService {
 
     private final invoiceRepository invoiceRepository;
@@ -49,7 +50,7 @@ public class invoiceService {
                             merchandise merchandiseToSave = null;
                             Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
                             Double availability = inventory.get().getAvailability();
-                            if(availability > merchandiseRequest.quantity() && availability > 0){
+                            if(availability >= merchandiseRequest.quantity() && availability > 0){
                                 Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
                                 totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
                                 inventory.get().setAvailability(availability - merchandiseRequest.quantity());
@@ -130,6 +131,7 @@ public class invoiceService {
                 invoice.getMerchandiseList().stream().map(
 
                         merchandise -> new merchandiseResponse(
+                                merchandise.getMerchId(),
                                 merchandise.getProduct().getName(),
                                 merchandise.getProduct().getUnit().toString(),
                                 merchandise.getQuantity(),
@@ -164,29 +166,10 @@ public class invoiceService {
             invoice.setBankName(request.bankName());
             invoice.setCheckNumber(request.checkNumber());
             invoice.setPaymentDate(request.paymentDate());
-
             return invoiceRepository.save(invoice);
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
     }
 
-    public invoice updateInvoiceById(updateInvoiceRequest request) {
-        Optional<invoice> invoice = invoiceRepository.findById(request.basicInvoice().invoiceId());
-        if (invoice.isPresent()){
-            Optional<client> client = clientRepository.findById(request.basicInvoice().clientId());
-            invoice.get().setClient(client.get());
-            invoice.get().setInvoiceDate(request.basicInvoice().invoiceDate());
-            invoice.get().setTotalTTC(request.basicInvoice().totalTTC());
-            invoice.get().setPaymentMethod(paymentMethod.valueOf(request.basicInvoice().paymentMethod()));
-            invoice.get().setBankName(request.basicInvoice().bankName());
-            invoice.get().setCheckNumber(request.basicInvoice().checkNumber());
-            invoice.get().setPaymentDate(request.basicInvoice().paymentDate());
-            invoice.get().setPrinted(request.printed());
-            invoice.get().setInvoiceAction(action.valueOf(request.invoiceAction()));
-            invoice.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
-            invoice.get().setInvoiceFile(request.invoiceFile());
-            return invoiceRepository.save(invoice.get());
-        }else throw
-                new requestException("The invoice id you provided doesn't exist",HttpStatus.NOT_FOUND);
-    }
+
 }

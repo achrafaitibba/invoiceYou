@@ -49,7 +49,7 @@ public class invoice {
 
     private String bankName;
 
-    private Double discount;
+    private Double discount; //todo, return it with the suggestion algorithm
 
     private Integer checkNumber;
 

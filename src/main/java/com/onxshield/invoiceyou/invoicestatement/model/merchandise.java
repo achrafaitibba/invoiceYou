@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.invoicestatement.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -28,5 +29,6 @@ public class merchandise {
 
     @NotNull
     private Double total;
+
 
 }

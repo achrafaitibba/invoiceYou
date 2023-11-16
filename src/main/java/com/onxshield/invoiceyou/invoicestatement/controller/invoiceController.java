@@ -2,7 +2,6 @@ package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.basicInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
-import com.onxshield.invoiceyou.invoicestatement.dto.request.updateInvoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import com.onxshield.invoiceyou.invoicestatement.model.invoice;
@@ -55,14 +54,7 @@ public class invoiceController {
     public ResponseEntity<Double> calculateTVA(@PathVariable Long total){
         return ResponseEntity.ok(total.doubleValue()/6);
     }
-    @PostMapping("/basic/create")
-    public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
-        return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
-    }
-    @PostMapping("/create")
-    public ResponseEntity<invoice> createInvoice(@RequestBody invoiceRequest request) {
-        return ResponseEntity.ok(invoiceService.createInvoice(request));
-    }
+
 
     @GetMapping("/basic/{invoiceId}")
     public ResponseEntity<basicInvoiceResponse> getBasicInvoiceById(@PathVariable String invoiceId){
@@ -79,13 +71,16 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.getAllInvoices());
     }
 
-    @PutMapping("/update")
-    public ResponseEntity<invoice> updateInvoiceById(@RequestBody updateInvoiceRequest request){
-        return ResponseEntity.ok(invoiceService.updateInvoiceById(request));
+    @PostMapping("/basic/create")
+    public ResponseEntity<invoice> createBasicInvoice(@RequestBody basicInvoiceRequest request) {
+        return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
+    }
+    @PostMapping("/create")
+    public ResponseEntity<invoice> createInvoice(@RequestBody invoiceRequest request) {
+        return ResponseEntity.ok(invoiceService.createInvoice(request));
     }
 
 
 
-    
 
 }
