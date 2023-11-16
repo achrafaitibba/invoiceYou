@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.request.merchandiseDetailsRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.request.merchandiseRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
@@ -191,4 +192,7 @@ public class invoiceService {
     }
 
 
+    public invoice updateInvoice(invoiceRequest<merchandiseDetailsRequest> request) {
+        return null;
+    }
 }
