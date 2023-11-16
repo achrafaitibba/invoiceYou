@@ -2,6 +2,7 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
+import com.onxshield.invoiceyou.invoicestatement.dto.request.merchandiseRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
@@ -31,7 +32,7 @@ public class invoiceService {
     private final merchandiseRepository merchandiseRepository;
     private final invoiceNumberRepository invoiceNumberRepository;
     static long latestInvoiceNumber = 1225;
-    public invoice createBasicInvoice(invoiceRequest request) {
+    public invoice createBasicInvoice(invoiceRequest<merchandiseRequest> request) {
         //find inventory by product id
         //check availability
         //get the sell price
@@ -130,7 +131,7 @@ public class invoiceService {
         return invoiceRepository.findAll();
     }
 
-    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
+    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest<merchandiseRequest> request){
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         return request.merchandiseList().stream()
                 .map(
@@ -156,7 +157,7 @@ public class invoiceService {
                 .toList();
     }
 
-    public invoice createInvoice(invoiceRequest request) {
+    public invoice createInvoice(invoiceRequest<merchandiseRequest> request) {
         //AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
