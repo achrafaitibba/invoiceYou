@@ -41,7 +41,7 @@ public class invoice {
     @NotNull
     private String spelledTotal;
 
-    private Double TVA; //todo live conversion endpoint
+    private Double TVA; 
 
     @NotNull
     @Enumerated(EnumType.STRING)

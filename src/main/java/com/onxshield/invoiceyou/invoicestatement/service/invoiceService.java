@@ -156,16 +156,7 @@ public class invoiceService {
     public invoice createInvoice(invoiceRequest request) {
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
             invoice invoice = new invoice();
-            invoice.setInvoiceId(request.invoiceId());
-            invoice.setInvoiceDate(request.invoiceDate());
-            invoice.setClient(clientRepository.findById(request.clientId()).get());
-            invoice.setTotalTTC(request.totalTTC());
-            invoice.setSpelledTotal(numberToWordUtil.convert(request.totalTTC()));
-            invoice.setTVA(request.totalTTC().doubleValue()/6);
-            invoice.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
-            invoice.setBankName(request.bankName());
-            invoice.setCheckNumber(request.checkNumber());
-            invoice.setPaymentDate(request.paymentDate());
+
             return invoiceRepository.save(invoice);
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
