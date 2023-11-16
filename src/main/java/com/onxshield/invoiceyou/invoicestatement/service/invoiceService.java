@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -35,7 +36,7 @@ public class invoiceService {
     public invoice createBasicInvoice(basicInvoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
-
+        List<merchandise> savedMerchandise = new ArrayList<>();
         //find inventory by product id
         //check availability
         //get the sell price
@@ -47,7 +48,7 @@ public class invoiceService {
                 .map(
 
                         merchandiseRequest -> {
-                            merchandise merchandiseToSave = null;
+                            merchandise merchandiseToSave ;
                             Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
                             Double availability = inventory.get().getAvailability();
                             if(availability >= merchandiseRequest.quantity() && availability > 0){
@@ -58,6 +59,7 @@ public class invoiceService {
                                 merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
                                 merchandiseToSave.setQuantity(merchandiseRequest.quantity());
                                 merchandiseToSave.setTotal(totalByProduct);
+                                savedMerchandise.add(merchandiseToSave);
                                 return merchandiseRepository.save(merchandiseToSave);
                             }else {
                                 throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
@@ -68,6 +70,7 @@ public class invoiceService {
                 )
                 .toList()
                 ;
+
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
             invoice invoiceToSave = new invoice();
             invoiceToSave.setInvoiceId(request.invoiceId());
@@ -80,8 +83,13 @@ public class invoiceService {
             invoiceToSave.setMerchandiseList(merchandiseList);
             invoiceToSave.setCheckNumber(request.checkNumber());
             invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
-
-            return invoiceRepository.save(invoiceToSave);
+            invoice saved = invoiceRepository.save(invoiceToSave);
+            for (merchandise merch: savedMerchandise
+                 ) {
+                Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
+                toUpdate.get().setInvoice(saved);
+            }
+            return saved;
         }
         else {
             throw new requestException("The Id you provided already used by other invoice",HttpStatus.CONFLICT);
