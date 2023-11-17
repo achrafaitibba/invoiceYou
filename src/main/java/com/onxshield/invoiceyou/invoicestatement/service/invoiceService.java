@@ -2,8 +2,6 @@ package com.onxshield.invoiceyou.invoicestatement.service;
 
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
-import com.onxshield.invoiceyou.invoicestatement.dto.request.merchandiseDetailsRequest;
-import com.onxshield.invoiceyou.invoicestatement.dto.request.merchandiseRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
