@@ -14,6 +14,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
@@ -55,6 +56,7 @@ public class invoiceService {
             invoiceToSave.setCheckNumber(request.checkNumber());
             invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
             invoice saved = invoiceRepository.save(invoiceToSave);
+
             for (merchandise merch: savedMerchandise
                  ) {
                 Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
@@ -159,7 +161,10 @@ public class invoiceService {
     public invoice createInvoice(invoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
-            List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
+            List<merchandise> savedMerchandise = null;
+            if (request.merchandiseList() != null){
+                savedMerchandise = merchandiseRequestToMerchandise(request);
+            }
             invoice invoiceToSave = invoice.builder()
                     .invoiceId(request.invoiceId())
                     .invoiceDate(request.invoiceDate())
@@ -178,11 +183,15 @@ public class invoiceService {
                     .merchandiseList(savedMerchandise)
                     .build();
             invoice saved = invoiceRepository.save(invoiceToSave);
-            for (merchandise merch: savedMerchandise
-            ) {
-                Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
-                toUpdate.get().setInvoice(saved);
+            if (request.merchandiseList() != null){
+                //savedMerchandise = merchandiseRequestToMerchandise(request);
+                for (merchandise merch: savedMerchandise
+                ) {
+                    Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
+                    toUpdate.get().setInvoice(saved);
+                }
             }
+
             return saved;
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
@@ -211,13 +220,16 @@ public class invoiceService {
             toUpdate.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
             toUpdate.get().setInvoiceFile(request.invoiceFile());
 
-            merchandiseRepository.deleteByInvoice_InvoiceId(request.invoiceId());
-            List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
-            for (merchandise merch: savedMerchandise
-            ) {
-                Optional<merchandise> merchToUpdate = merchandiseRepository.findById(merch.getMerchId());
-                merchToUpdate.get().setInvoice(toUpdate.get());
+            if(merchandiseRepository.findAllByInvoice_InvoiceId(request.invoiceId()) != null ){
+                merchandiseRepository.deleteByInvoice_InvoiceId(request.invoiceId());
+                List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
+                for (merchandise merch: savedMerchandise
+                ) {
+                    Optional<merchandise> merchToUpdate = merchandiseRepository.findById(merch.getMerchId());
+                    merchToUpdate.get().setInvoice(toUpdate.get());
+                }
             }
+
             return invoiceRepository.save(toUpdate.get());
         }else throw new requestException("The invoice doesn't exist", HttpStatus.NOT_FOUND);
     }
