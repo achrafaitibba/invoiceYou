@@ -56,7 +56,7 @@ public class invoice {
     @Temporal(TemporalType.DATE)
     private Date paymentDate;
 
-    @OneToMany
+    @OneToMany(mappedBy = "invoice", cascade = CascadeType.ALL)
     private List<merchandise> merchandiseList;
 
     private Boolean printed = false;

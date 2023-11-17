@@ -73,18 +73,19 @@ public class invoiceController {
     }
 
     @PostMapping("/basic/create")
-    public ResponseEntity<invoice> createBasicInvoice(@RequestBody invoiceRequest<merchandiseRequest> request) {
+    public ResponseEntity<invoice> createBasicInvoice(@RequestBody invoiceRequest request) {
         return ResponseEntity.ok(invoiceService.createBasicInvoice(request));
     }
     @PostMapping("/create")
-    public ResponseEntity<invoice> createInvoice(@RequestBody invoiceRequest<merchandiseRequest> request) {
+    public ResponseEntity<invoice> createInvoice(@RequestBody invoiceRequest request) {
         return ResponseEntity.ok(invoiceService.createInvoice(request));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<invoice> updateInvoice(@RequestBody invoiceRequest<merchandiseDetailsRequest> request){
+    public ResponseEntity<invoice> updateInvoice(@RequestBody invoiceRequest request){
         return ResponseEntity.ok(invoiceService.updateInvoice(request));
     }
+
 
 
 

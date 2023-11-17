@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -33,7 +34,7 @@ public class invoiceService {
     private final merchandiseRepository merchandiseRepository;
     private final invoiceNumberRepository invoiceNumberRepository;
     static long latestInvoiceNumber = 1225;
-    public invoice createBasicInvoice(invoiceRequest<merchandiseRequest> request) {
+    public invoice createBasicInvoice(invoiceRequest request) {
         //find inventory by product id
         //check availability
         //get the sell price
@@ -132,7 +133,7 @@ public class invoiceService {
         return invoiceRepository.findAll();
     }
 
-    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest<merchandiseRequest> request){
+    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
         AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         return request.merchandiseList().stream()
                 .map(
@@ -143,7 +144,7 @@ public class invoiceService {
                             Double availability = inventory.get().getAvailability();
                             if(availability >= merchandiseRequest.quantity() && availability > 0){
                                 Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
-                                totalTTC.updateAndGet(v -> v + totalByProduct.longValue());
+                                totalTTC.updateAndGet(v -> v + totalByProduct.longValue()); //todo, suggested by IDE, google it
                                 inventory.get().setAvailability(availability - merchandiseRequest.quantity());
                                 merchandiseToSave = new merchandise();
                                 merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
@@ -158,7 +159,7 @@ public class invoiceService {
                 .toList();
     }
 
-    public invoice createInvoice(invoiceRequest<merchandiseRequest> request) {
+    public invoice createInvoice(invoiceRequest request) {
         //AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
@@ -192,7 +193,39 @@ public class invoiceService {
     }
 
 
-    public invoice updateInvoice(invoiceRequest<merchandiseDetailsRequest> request) {
-        return null;
+    public invoice updateInvoice(invoiceRequest request) {
+
+        // update the invoice ID? if yes (merchandise should be updated also)
+        // and the list of available ID should have a new record (the previous Invoice id)
+        /////////////////////////////////////////
+        Optional<invoice> toUpdate = invoiceRepository.findById(request.invoiceId());
+        if(toUpdate.isPresent()){
+            // basics
+            Optional<client> client = clientRepository.findById(request.clientId());
+            toUpdate.get().setInvoiceDate(request.invoiceDate());
+            toUpdate.get().setClient(client.get());
+            toUpdate.get().setTotalTTC(request.totalTTC());
+            toUpdate.get().setSpelledTotal(convertNumberToWords(request.totalTTC()));
+            toUpdate.get().setTVA(request.totalTTC().doubleValue()/6);
+            toUpdate.get().setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
+            toUpdate.get().setBankName(request.bankName());
+            toUpdate.get().setCheckNumber(request.checkNumber());
+            toUpdate.get().setPaymentDate(request.paymentDate());
+            toUpdate.get().setPrinted(Boolean.valueOf(request.printed()));
+            toUpdate.get().setInvoiceAction(action.valueOf(request.invoiceAction()));
+            toUpdate.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
+            toUpdate.get().setInvoiceFile(request.invoiceFile());
+
+            merchandiseRepository.deleteByInvoice_InvoiceId(request.invoiceId());
+            List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
+            for (merchandise merch: savedMerchandise
+            ) {
+                Optional<merchandise> merchToUpdate = merchandiseRepository.findById(merch.getMerchId());
+                merchToUpdate.get().setInvoice(toUpdate.get());
+            }
+            return invoiceRepository.save(toUpdate.get());
+        }else throw new requestException("The invoice doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+
 }

@@ -3,7 +3,7 @@ package com.onxshield.invoiceyou.invoicestatement.dto.request;
 import java.util.Date;
 import java.util.List;
 
-public record invoiceRequest<T>(
+public record invoiceRequest(
 
         String invoiceId,
         Date invoiceDate,
@@ -13,7 +13,7 @@ public record invoiceRequest<T>(
         String bankName,
         Integer checkNumber,
         Date paymentDate,
-        List<T> merchandiseList,
+        List<merchandiseRequest> merchandiseList,
         String printed,
         String invoiceAction,
         String invoiceStatus,
