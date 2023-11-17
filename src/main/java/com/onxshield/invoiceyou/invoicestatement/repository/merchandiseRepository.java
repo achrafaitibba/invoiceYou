@@ -12,6 +12,4 @@ public interface merchandiseRepository extends JpaRepository<merchandise, Long> 
 
 
     void deleteByInvoice_InvoiceId(String id);
-    void deleteAllByInvoice_InvoiceId(String id);
-    List<Optional<merchandise>> findAllByInvoice_InvoiceId(String id);
 }
