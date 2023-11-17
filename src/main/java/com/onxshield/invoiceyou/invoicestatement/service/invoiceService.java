@@ -18,7 +18,6 @@ import org.springframework.stereotype.Service;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -160,7 +159,6 @@ public class invoiceService {
     }
 
     public invoice createInvoice(invoiceRequest request) {
-        //AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
             List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
