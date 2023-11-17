@@ -220,6 +220,6 @@ public class numberToWordUtil {
         tradMille = convertLessThanOneThousand(lesMille);
         resultat =  resultat + tradMille;
 
-        return resultat.toUpperCase();
+        return resultat.concat(" DIRHAMS").toUpperCase();
     }
 }

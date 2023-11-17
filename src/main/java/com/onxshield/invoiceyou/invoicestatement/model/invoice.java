@@ -3,10 +3,7 @@ package com.onxshield.invoiceyou.invoicestatement.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.springframework.stereotype.Component;
 
 
@@ -29,6 +26,7 @@ public class invoice {
     @NotNull
     @Temporal(TemporalType.DATE)
     private Date invoiceDate;
+
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
