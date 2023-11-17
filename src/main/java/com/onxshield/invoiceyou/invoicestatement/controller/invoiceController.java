@@ -39,6 +39,8 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.convertNumberToWords(total));
     }
 
+
+    //todo pagination
     @GetMapping("/availableInvoiceNumbers")
     public ResponseEntity<String[]> getAvailableInvoiceNumbers(){
         return ResponseEntity.ok(invoiceService.getAvailableInvoiceNumbers());
@@ -65,6 +67,8 @@ public class invoiceController {
         return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
     }
 
+
+    //todo pagination, sorting by date/total
     @GetMapping("/all")
     public ResponseEntity<List<invoice>> getAllInvoices(){
         return ResponseEntity.ok(invoiceService.getAllInvoices());

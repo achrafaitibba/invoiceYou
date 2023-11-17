@@ -29,6 +29,8 @@ public class inventoryController {
         return ResponseEntity.ok(unit.values());
     }
 
+
+    //todo pagination
     @GetMapping("/products")
     public ResponseEntity<List<productResponse>> getAllProducts(){
         return ResponseEntity.ok(inventoryService.getAllProducts());
@@ -57,6 +59,8 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.deleteProduct(id));
     }
 
+
+    //todo pagination
     @GetMapping("/all")
     public ResponseEntity<List<inventoryResponse>> getInventory(){
         return ResponseEntity.ok(inventoryService.getInventory());

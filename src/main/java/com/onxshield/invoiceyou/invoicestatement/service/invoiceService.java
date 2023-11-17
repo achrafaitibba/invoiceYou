@@ -133,7 +133,6 @@ public class invoiceService {
     }
 
     public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
-        AtomicReference<Double> totalTTC = new AtomicReference<>(0D);
         return request.merchandiseList().stream()
                 .map(
 
@@ -143,7 +142,6 @@ public class invoiceService {
                             Double availability = inventory.get().getAvailability();
                             if(availability >= merchandiseRequest.quantity() && availability > 0){
                                 Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
-                                totalTTC.updateAndGet(v -> v + totalByProduct.longValue()); //todo, suggested by IDE, google it
                                 inventory.get().setAvailability(availability - merchandiseRequest.quantity());
                                 merchandiseToSave = new merchandise();
                                 merchandiseToSave.setProduct(productRepository.findById(merchandiseRequest.productId()).get());
