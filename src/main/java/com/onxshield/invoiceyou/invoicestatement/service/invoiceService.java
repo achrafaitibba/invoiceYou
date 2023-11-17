@@ -200,7 +200,6 @@ public class invoiceService {
         /////////////////////////////////////////
         Optional<invoice> toUpdate = invoiceRepository.findById(request.invoiceId());
         if(toUpdate.isPresent()){
-            // basics
             Optional<client> client = clientRepository.findById(request.clientId());
             toUpdate.get().setInvoiceDate(request.invoiceDate());
             toUpdate.get().setClient(client.get());
