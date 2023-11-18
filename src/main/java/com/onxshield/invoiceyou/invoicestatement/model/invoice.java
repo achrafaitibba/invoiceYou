@@ -28,7 +28,7 @@ public class invoice {
     private Date invoiceDate;
 
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinColumn(name = "fk_client_id", referencedColumnName = "client_id")
     @NotNull
     private client client;

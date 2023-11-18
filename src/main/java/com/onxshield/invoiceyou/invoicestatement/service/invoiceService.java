@@ -233,13 +233,23 @@ public class invoiceService {
 
     public void deleteAllMerchandiseUpdateInventory(String invoiceId){
         List<merchandise> merchandiseList = merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId);
-        for (merchandise merch: merchandiseList
-             ) {
-            Optional<inventory> toUpdate = inventoryRepository.findByProductProductId(merch.getProduct().getProductId());
-            Double availableQuantity = toUpdate.get().getAvailability();
-            toUpdate.get().setAvailability(availableQuantity + merch.getQuantity());
+        if(merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId) != null ){
+            for (merchandise merch: merchandiseList
+            ) {
+                Optional<inventory> toUpdate = inventoryRepository.findByProductProductId(merch.getProduct().getProductId());
+                Double availableQuantity = toUpdate.get().getAvailability();
+                toUpdate.get().setAvailability(availableQuantity + merch.getQuantity());
+            }
+            merchandiseRepository.deleteByInvoice_InvoiceId(invoiceId);
         }
-        merchandiseRepository.deleteByInvoice_InvoiceId(invoiceId);
     }
 
+    public void deleteInvoiceById(String invoiceId) {
+        Optional<invoice> toDelete = invoiceRepository.findById(invoiceId);
+        if(toDelete.isPresent()){
+            deleteAllMerchandiseUpdateInventory(invoiceId);
+            invoiceRepository.deleteById(invoiceId);
+            invoiceNumberRepository.save(invoiceNumber.builder().invoiceNumber(invoiceId).build());
+        }else throw new requestException("The invoice id you provided doesn't exist",HttpStatus.NOT_FOUND);
+    }
 }
