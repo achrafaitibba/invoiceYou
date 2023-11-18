@@ -56,4 +56,9 @@ public class statementController {
         statementService.deleteStatement(id);
         return ResponseEntity.noContent().build();
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<statement> getById(@PathVariable Long id){
+        return ResponseEntity.ok(statementService.getById(id));
+    }
 }

@@ -44,4 +44,11 @@ public class statementService {
             statementRepository.deleteById(id);
         }else throw new requestException("The id you provided doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+    public statement getById(Long id) {
+        Optional<statement> statement = statementRepository.findById(id);
+        if(statement.isPresent()){
+           return statement.get();
+        }else throw new requestException("The id you provided doesn't exist", HttpStatus.NOT_FOUND);
+    }
 }
