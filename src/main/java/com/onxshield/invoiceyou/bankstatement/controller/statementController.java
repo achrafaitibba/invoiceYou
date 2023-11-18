@@ -39,8 +39,13 @@ public class statementController {
     public ResponseEntity<invoiceType[]> getInvoiceTypes(){
         return ResponseEntity.ok(invoiceType.values());
     }
+    @PostMapping("/basic/create/list")
+    public ResponseEntity<List<statement>> createBasicStatements(@RequestBody List<basicStatementRequest> request){
+        return ResponseEntity.ok(statementService.createBasicStatements(request));
+    }
+
     @PostMapping("/basic/create")
-    public ResponseEntity<List<statement>> createBasicStatement(@RequestBody List<basicStatementRequest> request){
+    public ResponseEntity<statement> createBasicStatement(@RequestBody basicStatementRequest request){
         return ResponseEntity.ok(statementService.createBasicStatement(request));
     }
 

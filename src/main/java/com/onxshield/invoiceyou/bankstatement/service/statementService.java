@@ -22,7 +22,7 @@ import java.util.Optional;
 public class statementService {
 
     private final statementRepository statementRepository;
-    public List<statement> createBasicStatement(List<basicStatementRequest> request) {
+    public List<statement> createBasicStatements(List<basicStatementRequest> request) {
         List<statement> saved = new ArrayList<>();
         for (basicStatementRequest req: request
              ) {
@@ -34,6 +34,16 @@ public class statementService {
                     .build()));
         }
         return saved;
+    }
+    public statement createBasicStatement(basicStatementRequest request) {
+
+           return statementRepository.save(statement.builder()
+                    .statementDate(request.statementDate())
+                    .description(request.description())
+                    .transactionType(transactionType.valueOf(request.transactionType()))
+                    .amount(request.amount())
+                    .build());
+
     }
 
     public statement createStatement(statement statement) {
