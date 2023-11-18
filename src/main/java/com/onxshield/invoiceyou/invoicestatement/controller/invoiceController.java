@@ -7,10 +7,14 @@ import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import com.onxshield.invoiceyou.invoicestatement.model.status;
 import com.onxshield.invoiceyou.invoicestatement.service.invoiceService;
+import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -57,13 +61,13 @@ public class invoiceController {
     }
 
 
-    @GetMapping("/basic/{invoiceId}")
-    public ResponseEntity<basicInvoiceResponse> getBasicInvoiceById(@PathVariable String invoiceId){
+    @GetMapping("/basic/")
+    public ResponseEntity<basicInvoiceResponse> getBasicInvoiceById(@RequestParam String invoiceId){
         return ResponseEntity.ok(invoiceService.getBasicInvoiceById(invoiceId));
     }
 
-    @GetMapping("/{invoiceId}")
-    public ResponseEntity<invoice> getInvoiceById(@PathVariable String invoiceId){
+    @GetMapping("/")
+    public ResponseEntity<invoice> getInvoiceById(@RequestParam String invoiceId){
         return ResponseEntity.ok(invoiceService.getInvoiceById(invoiceId));
     }
 
@@ -89,8 +93,8 @@ public class invoiceController {
     }
 
 
-    @DeleteMapping("/delete/{invoiceId}")
-    public ResponseEntity<Void> deleteInvoiceById(@PathVariable String invoiceId) {
+    @DeleteMapping("/delete")
+    public ResponseEntity<Void> deleteInvoiceById(@RequestParam String invoiceId) {
         invoiceService.deleteInvoiceById(invoiceId);
         return ResponseEntity.noContent().build();
     }

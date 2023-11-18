@@ -41,7 +41,7 @@ public class invoiceService {
 
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
-
+            deleteInvoiceNumberByInvoiceNumber(request.invoiceId());
             List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
             invoice invoiceToSave = new invoice();
             invoiceToSave.setInvoiceId(request.invoiceId());
@@ -158,6 +158,7 @@ public class invoiceService {
     public invoice createInvoice(invoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
         if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+            deleteInvoiceNumberByInvoiceNumber(request.invoiceId());
             List<merchandise> savedMerchandise = null;
             if (request.merchandiseList() != null){
                 savedMerchandise = merchandiseRequestToMerchandise(request);
@@ -192,6 +193,13 @@ public class invoiceService {
             return saved;
         }
         else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
+    }
+
+    private void deleteInvoiceNumberByInvoiceNumber(String invoiceNumber) {
+        Optional<invoiceNumber> invoiceN = invoiceNumberRepository.findById(invoiceNumber);
+        if (invoiceN.isPresent()){
+            invoiceNumberRepository.deleteById(invoiceNumber);
+        }
     }
 
 
