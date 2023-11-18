@@ -14,10 +14,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Year;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 
 @Service
@@ -81,6 +79,7 @@ public class invoiceService {
         return numbers.toArray(new String[0]);
     }
 
+    //todo, if an ID is used, delete from invoiceNumber
     public String generateInvoiceNumber() {
         int currentYear = Year.now().getValue();
         int lastTwoDigits = currentYear % 100;
@@ -219,7 +218,7 @@ public class invoiceService {
             toUpdate.get().setInvoiceFile(request.invoiceFile());
 
             if(merchandiseRepository.findAllByInvoice_InvoiceId(request.invoiceId()) != null ){
-                merchandiseRepository.deleteByInvoice_InvoiceId(request.invoiceId());
+                deleteAllMerchandiseUpdateInventory(request.invoiceId());
                 List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
                 for (merchandise merch: savedMerchandise
                 ) {
@@ -232,5 +231,15 @@ public class invoiceService {
         }else throw new requestException("The invoice doesn't exist", HttpStatus.NOT_FOUND);
     }
 
+    public void deleteAllMerchandiseUpdateInventory(String invoiceId){
+        List<merchandise> merchandiseList = merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId);
+        for (merchandise merch: merchandiseList
+             ) {
+            Optional<inventory> toUpdate = inventoryRepository.findByProductProductId(merch.getProduct().getProductId());
+            Double availableQuantity = toUpdate.get().getAvailability();
+            toUpdate.get().setAvailability(availableQuantity + merch.getQuantity());
+        }
+        merchandiseRepository.deleteByInvoice_InvoiceId(invoiceId);
+    }
 
 }
