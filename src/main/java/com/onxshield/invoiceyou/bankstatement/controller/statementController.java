@@ -40,4 +40,11 @@ public class statementController {
     public ResponseEntity<statement> createBasicStatement(@RequestBody basicStatementRequest request){
         return ResponseEntity.ok(statementService.createBasicStatement(request));
     }
+
+    @PostMapping("/create")
+    public ResponseEntity<statement> createStatement(@RequestBody statement statement){
+        return ResponseEntity.ok(statementService.createStatement(statement));
+    }
+
+
 }

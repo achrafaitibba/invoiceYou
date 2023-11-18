@@ -6,7 +6,7 @@ public record basicStatementRequest(
         Date statementDate,
         String description,
         String transactionType,
-        Long totalTTC
+        Long amount
 
 
 

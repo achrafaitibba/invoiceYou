@@ -35,7 +35,7 @@ public class statement {
 
     private transactionType transactionType;
 
-    private Long totalTTC;
+    private Long amount;
     ///////////////////////////////////////////////
     private String partnerName;
 

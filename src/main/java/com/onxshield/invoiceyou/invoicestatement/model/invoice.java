@@ -65,5 +65,5 @@ public class invoice {
     @Enumerated(EnumType.STRING)
     private status invoiceStatus = status.NOT_YET;
 
-    private String invoiceFile = ""; //todo file could be word or pdf
+    private String invoiceFile = ""; //todo, link to file in localstorage
 }

@@ -18,8 +18,12 @@ public class statementService {
                 .statementDate(request.statementDate())
                 .description(request.description())
                 .transactionType(transactionType.valueOf(request.transactionType()))
-                .totalTTC(request.totalTTC())
+                .amount(request.amount())
                 .build());
 
+    }
+
+    public statement createStatement(statement statement) {
+        return statementRepository.save(statement);
     }
 }
