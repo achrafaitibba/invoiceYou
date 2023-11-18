@@ -19,7 +19,6 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;

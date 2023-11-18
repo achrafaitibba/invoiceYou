@@ -2,21 +2,17 @@ package com.onxshield.invoiceyou.invoicestatement.controller;
 
 import com.onxshield.invoiceyou.invoicestatement.dto.request.invoiceRequest;
 import com.onxshield.invoiceyou.invoicestatement.dto.response.basicInvoiceResponse;
+import com.onxshield.invoiceyou.invoicestatement.dto.response.merchandiseResponse;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import com.onxshield.invoiceyou.invoicestatement.model.status;
 import com.onxshield.invoiceyou.invoicestatement.service.invoiceService;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.UnsupportedEncodingException;
-import java.net.URLDecoder;
-import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @RestController
@@ -101,8 +97,5 @@ public class invoiceController {
         invoiceService.deleteInvoiceById(invoiceId);
         return ResponseEntity.noContent().build();
     }
-
-
-
 
 }
