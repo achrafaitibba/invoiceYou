@@ -1,15 +1,15 @@
 package com.onxshield.invoiceyou.bankstatement.controller;
 
+import com.onxshield.invoiceyou.bankstatement.dto.request.basicStatementRequest;
 import com.onxshield.invoiceyou.bankstatement.model.invoiceType;
+import com.onxshield.invoiceyou.bankstatement.model.statement;
 import com.onxshield.invoiceyou.bankstatement.model.status;
 import com.onxshield.invoiceyou.bankstatement.model.transactionType;
 import com.onxshield.invoiceyou.bankstatement.service.statementService;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -35,5 +35,9 @@ public class statementController {
     @GetMapping("/invoiceType")
     public ResponseEntity<invoiceType[]> getInvoiceTypes(){
         return ResponseEntity.ok(invoiceType.values());
+    }
+    @PostMapping("/basic/create")
+    public ResponseEntity<statement> createBasicStatement(@RequestBody basicStatementRequest request){
+        return ResponseEntity.ok(statementService.createBasicStatement(request));
     }
 }
