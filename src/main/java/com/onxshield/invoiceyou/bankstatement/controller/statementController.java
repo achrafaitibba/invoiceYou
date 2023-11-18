@@ -12,6 +12,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/v1/statements")
@@ -38,7 +40,7 @@ public class statementController {
         return ResponseEntity.ok(invoiceType.values());
     }
     @PostMapping("/basic/create")
-    public ResponseEntity<statement> createBasicStatement(@RequestBody basicStatementRequest request){
+    public ResponseEntity<List<statement>> createBasicStatement(@RequestBody List<basicStatementRequest> request){
         return ResponseEntity.ok(statementService.createBasicStatement(request));
     }
 

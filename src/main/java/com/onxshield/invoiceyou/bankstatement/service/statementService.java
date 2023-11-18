@@ -13,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -20,15 +22,18 @@ import java.util.Optional;
 public class statementService {
 
     private final statementRepository statementRepository;
-    public statement createBasicStatement(basicStatementRequest request) {
-
-        return statementRepository.save(statement.builder()
-                .statementDate(request.statementDate())
-                .description(request.description())
-                .transactionType(transactionType.valueOf(request.transactionType()))
-                .amount(request.amount())
-                .build());
-
+    public List<statement> createBasicStatement(List<basicStatementRequest> request) {
+        List<statement> saved = new ArrayList<>();
+        for (basicStatementRequest req: request
+             ) {
+           saved.add(statementRepository.save(statement.builder()
+                    .statementDate(req.statementDate())
+                    .description(req.description())
+                    .transactionType(transactionType.valueOf(req.transactionType()))
+                    .amount(req.amount())
+                    .build()));
+        }
+        return saved;
     }
 
     public statement createStatement(statement statement) {
