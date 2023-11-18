@@ -28,5 +28,9 @@ public class statementController {
     public ResponseEntity<status[]> getStatus(){
         return ResponseEntity.ok(status.values());
     }
+    @GetMapping("/action")
+    public ResponseEntity<action[]> getActions(){
+        return ResponseEntity.ok(action.values());
+    }
    
 }
