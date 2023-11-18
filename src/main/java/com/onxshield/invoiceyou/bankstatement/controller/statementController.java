@@ -32,5 +32,8 @@ public class statementController {
     public ResponseEntity<action[]> getActions(){
         return ResponseEntity.ok(action.values());
     }
-   
+    @GetMapping("/invoiceType")
+    public ResponseEntity<invoiceType[]> getInvoiceTypes(){
+        return ResponseEntity.ok(invoiceType.values());
+    }
 }
