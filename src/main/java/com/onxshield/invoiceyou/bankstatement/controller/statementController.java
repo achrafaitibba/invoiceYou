@@ -1,7 +1,10 @@
 package com.onxshield.invoiceyou.bankstatement.controller;
 
+import com.onxshield.invoiceyou.bankstatement.model.invoiceType;
+import com.onxshield.invoiceyou.bankstatement.model.status;
 import com.onxshield.invoiceyou.bankstatement.model.transactionType;
 import com.onxshield.invoiceyou.bankstatement.service.statementService;
+import com.onxshield.invoiceyou.invoicestatement.model.action;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +20,9 @@ public class statementController {
 
 
     @GetMapping("/transactionType")
-    public ResponseEntity<transactionType[]> transactionType(){
+    public ResponseEntity<transactionType[]> getTransactionTypes(){
         return ResponseEntity.ok(transactionType.values());
     }
+
+    
 }

@@ -33,7 +33,7 @@ public class statement {
     @NotNull
     private String description;
 
-    private transactionType transactionType;//todo, endpoint
+    private transactionType transactionType;
 
     private Long totalTTC;
     ///////////////////////////////////////////////
@@ -44,15 +44,15 @@ public class statement {
 
     private Integer checkNumber;
 
-    private status status; //todo, endpoint
+    private status status;
 
     private Boolean printed;
 
     private String file;
 
-    private action action; //todo, endpoint
+    private action action;
 
-    private invoiceType invoiceType; //todo, endpoint
+    private invoiceType invoiceType;
 
     private String invoiceNumber;
 
