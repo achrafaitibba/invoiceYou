@@ -37,4 +37,11 @@ public class statementService {
             return statementRepository.save(statementRequest);
         }else throw  new requestException("The id provided doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+    public void deleteStatement(Long id) {
+        Optional<statement> toDelete = statementRepository.findById(id);
+        if(toDelete.isPresent()){
+            statementRepository.deleteById(id);
+        }else throw new requestException("The id you provided doesn't exist", HttpStatus.NOT_FOUND);
+    }
 }
