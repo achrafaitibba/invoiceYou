@@ -6,6 +6,10 @@ import com.onxshield.invoiceyou.bankstatement.model.transactionType;
 import com.onxshield.invoiceyou.bankstatement.repository.statementRepository;
 import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -50,5 +54,10 @@ public class statementService {
         if(statement.isPresent()){
            return statement.get();
         }else throw new requestException("The id you provided doesn't exist", HttpStatus.NOT_FOUND);
+    }
+
+    public Page<statement> getAllStatements(Integer pageNumber, Integer size) {
+        Pageable pageable = PageRequest.of(pageNumber, size);
+        return statementRepository.findAll(pageable);
     }
 }

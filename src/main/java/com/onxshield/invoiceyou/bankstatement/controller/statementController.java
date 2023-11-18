@@ -8,6 +8,7 @@ import com.onxshield.invoiceyou.bankstatement.model.transactionType;
 import com.onxshield.invoiceyou.bankstatement.service.statementService;
 import com.onxshield.invoiceyou.invoicestatement.model.action;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,5 +61,12 @@ public class statementController {
     @GetMapping("/{id}")
     public ResponseEntity<statement> getById(@PathVariable Long id){
         return ResponseEntity.ok(statementService.getById(id));
+    }
+
+
+    @RequestMapping(value = "/all/{page}/{size}", method = RequestMethod.GET)
+    public Page<statement> getAllStatements(@PathVariable Integer page,
+                                            @PathVariable Integer size){
+        return statementService.getAllStatements(page, size);
     }
 }
