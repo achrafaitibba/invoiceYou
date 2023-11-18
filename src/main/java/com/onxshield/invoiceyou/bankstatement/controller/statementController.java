@@ -1,5 +1,6 @@
 package com.onxshield.invoiceyou.bankstatement.controller;
 
+import com.onxshield.invoiceyou.bankstatement.model.transactionType;
 import com.onxshield.invoiceyou.bankstatement.service.statementService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,4 +16,8 @@ public class statementController {
     private final statementService statementService;
 
 
+    @GetMapping("/transactionType")
+    public ResponseEntity<transactionType[]> transactionType(){
+        return ResponseEntity.ok(transactionType.values());
+    }
 }
