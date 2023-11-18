@@ -24,5 +24,9 @@ public class statementController {
         return ResponseEntity.ok(transactionType.values());
     }
 
-    
+    @GetMapping("/status")
+    public ResponseEntity<status[]> getStatus(){
+        return ResponseEntity.ok(status.values());
+    }
+   
 }
