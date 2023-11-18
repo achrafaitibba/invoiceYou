@@ -46,5 +46,9 @@ public class statementController {
         return ResponseEntity.ok(statementService.createStatement(statement));
     }
 
+    @PutMapping("/update")
+    public ResponseEntity<statement> updateStatement(@RequestBody statement statement){
+        return ResponseEntity.ok(statementService.updateStatement(statement));
+    }
 
 }

@@ -23,7 +23,7 @@ public class statement {
     @Id
     @GeneratedValue
     @Column(name = "statement_id")
-    private Integer statementId;
+    private Long statementId;
 
     @Column(name = "statement_date")
     @Temporal(TemporalType.DATE)
