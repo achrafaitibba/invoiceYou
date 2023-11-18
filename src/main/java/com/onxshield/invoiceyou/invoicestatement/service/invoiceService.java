@@ -60,6 +60,7 @@ public class invoiceService {
             invoiceToSave.setMerchandiseList(savedMerchandise);
             invoiceToSave.setCheckNumber(request.checkNumber());
             invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
+            invoiceToSave.setDiscount(request.discount());
             invoice saved = invoiceRepository.save(invoiceToSave);
 
             for (merchandise merch : savedMerchandise
@@ -185,6 +186,7 @@ public class invoiceService {
                     .invoiceStatus(status.valueOf(request.invoiceStatus()))
                     .invoiceFile(request.invoiceFile())
                     .merchandiseList(savedMerchandise)
+                    .discount(request.discount())
                     .build();
             invoice saved = invoiceRepository.save(invoiceToSave);
             if (request.merchandiseList() != null) {
@@ -229,6 +231,7 @@ public class invoiceService {
             toUpdate.get().setInvoiceAction(action.valueOf(request.invoiceAction()));
             toUpdate.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
             toUpdate.get().setInvoiceFile(request.invoiceFile());
+            toUpdate.get().setDiscount(request.discount());
 
             if (merchandiseRepository.findAllByInvoice_InvoiceId(request.invoiceId()) != null) {
                 deleteAllMerchandiseUpdateInventory(request.invoiceId());

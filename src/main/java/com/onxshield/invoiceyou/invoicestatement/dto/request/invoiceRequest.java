@@ -17,7 +17,8 @@ public record invoiceRequest(
         String printed,
         String invoiceAction,
         String invoiceStatus,
-        String invoiceFile
+        String invoiceFile,
+        Double discount
 
 
 ) {
