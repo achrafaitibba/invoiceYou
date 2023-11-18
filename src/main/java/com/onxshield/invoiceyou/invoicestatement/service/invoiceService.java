@@ -8,6 +8,8 @@ import com.onxshield.invoiceyou.invoicestatement.exceptions.requestException;
 import com.onxshield.invoiceyou.invoicestatement.model.*;
 import com.onxshield.invoiceyou.invoicestatement.repository.*;
 import com.onxshield.invoiceyou.invoicestatement.util.numberToWordUtil;
+import com.onxshield.invoiceyou.invoicestatement.util.doubleTwoDigitConverter;
+
 import jakarta.transaction.Transactional;
 import lombok.*;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.text.DecimalFormat;
 import java.time.Year;
 import java.util.List;
 import java.util.Optional;
@@ -34,6 +37,7 @@ public class invoiceService {
     private final merchandiseRepository merchandiseRepository;
     private final invoiceNumberRepository invoiceNumberRepository;
     static long latestInvoiceNumber = 1225;
+
     public invoice createBasicInvoice(invoiceRequest request) {
         //find inventory by product id
         //check availability
@@ -44,7 +48,7 @@ public class invoiceService {
         //BUILD the merchandise instances
 
         Optional<client> client = clientRepository.findById(request.clientId());
-        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+        if (invoiceRepository.findById(request.invoiceId()).isEmpty()) {
             deleteInvoiceNumberByInvoiceNumber(request.invoiceId());
             List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
             invoice invoiceToSave = new invoice();
@@ -52,22 +56,21 @@ public class invoiceService {
             invoiceToSave.setInvoiceDate(request.invoiceDate());
             invoiceToSave.setClient(client.get());
             invoiceToSave.setTotalTTC(request.totalTTC());
-            invoiceToSave.setTVA(request.totalTTC().doubleValue() /6);
+            invoiceToSave.setTVA(twoDigitTVA(request.totalTTC().doubleValue() / 6));
             invoiceToSave.setSpelledTotal(convertNumberToWords(request.totalTTC().longValue()));
             invoiceToSave.setMerchandiseList(savedMerchandise);
             invoiceToSave.setCheckNumber(request.checkNumber());
             invoiceToSave.setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
             invoice saved = invoiceRepository.save(invoiceToSave);
 
-            for (merchandise merch: savedMerchandise
-                 ) {
+            for (merchandise merch : savedMerchandise
+            ) {
                 Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
                 toUpdate.get().setInvoice(saved);
             }
             return saved;
-        }
-        else {
-            throw new requestException("The Id you provided already used by other invoice",HttpStatus.CONFLICT);
+        } else {
+            throw new requestException("The Id you provided already used by other invoice", HttpStatus.CONFLICT);
         }
     }
 
@@ -87,19 +90,18 @@ public class invoiceService {
         int currentYear = Year.now().getValue();
         int lastTwoDigits = currentYear % 100;
         latestInvoiceNumber++;
-        String toSave = "ST"+latestInvoiceNumber+"/"+String.format("%02d", lastTwoDigits);
+        String toSave = "ST" + latestInvoiceNumber + "/" + String.format("%02d", lastTwoDigits);
         invoiceNumberRepository.save(new invoiceNumber(toSave));
         latestInvoiceNumber++;
-        return "ST"+latestInvoiceNumber+"/"+String.format("%02d", lastTwoDigits);
+        return "ST" + latestInvoiceNumber + "/" + String.format("%02d", lastTwoDigits);
 
     }
 
     public invoice getInvoiceById(String invoiceId) {
         Optional<invoice> invoice = invoiceRepository.findById(invoiceId);
-        if (invoice.isPresent()){
+        if (invoice.isPresent()) {
             return invoice.get();
-        }
-        else throw new requestException("The Id you provided doesn't exist",HttpStatus.CONFLICT);
+        } else throw new requestException("The Id you provided doesn't exist", HttpStatus.CONFLICT);
     }
 
     public basicInvoiceResponse getBasicInvoiceById(String invoiceId) {
@@ -111,15 +113,15 @@ public class invoiceService {
                 invoice.getInvoiceDate(),
                 invoice.getMerchandiseList().stream().map(
 
-                        merchandise -> new merchandiseResponse(
-                                merchandise.getMerchId(),
-                                merchandise.getProduct().getName(),
-                                merchandise.getProduct().getUnit().toString(),
-                                merchandise.getQuantity(),
-                                inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice(),
-                                merchandise.getQuantity().longValue() * inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice().longValue()
+                                merchandise -> new merchandiseResponse(
+                                        merchandise.getMerchId(),
+                                        merchandise.getProduct().getName(),
+                                        merchandise.getProduct().getUnit().toString(),
+                                        merchandise.getQuantity(),
+                                        inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice(),
+                                        merchandise.getQuantity().longValue() * inventoryRepository.findByProductProductId(merchandise.getProduct().getProductId()).get().getSellPrice().longValue()
+                                )
                         )
-                )
                         .toList(),
                 invoice.getTotalTTC(),
                 invoice.getTVA(),
@@ -131,20 +133,20 @@ public class invoiceService {
     }
 
     public Page<invoice> getAllInvoices(Integer pageNumber, Integer size, String direction, String sortBy) {
-        Sort soring = Sort.by(Sort.Direction.valueOf(direction.toUpperCase()),sortBy);
+        Sort soring = Sort.by(Sort.Direction.valueOf(direction.toUpperCase()), sortBy);
         Pageable page = PageRequest.of(pageNumber, size, soring);
         return invoiceRepository.findAll(page);
     }
 
-    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
+    public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request) {
         return request.merchandiseList().stream()
                 .map(
 
                         merchandiseRequest -> {
-                            merchandise merchandiseToSave ;
+                            merchandise merchandiseToSave;
                             Optional<inventory> inventory = inventoryRepository.findByProductProductId(merchandiseRequest.productId());
                             Double availability = inventory.get().getAvailability();
-                            if(availability >= merchandiseRequest.quantity() && availability > 0){
+                            if (availability >= merchandiseRequest.quantity() && availability > 0) {
                                 Double totalByProduct = merchandiseRequest.quantity() * inventory.get().getSellPrice();
                                 inventory.get().setAvailability(availability - merchandiseRequest.quantity());
                                 merchandiseToSave = new merchandise();
@@ -152,7 +154,7 @@ public class invoiceService {
                                 merchandiseToSave.setQuantity(merchandiseRequest.quantity());
                                 merchandiseToSave.setTotal(totalByProduct);
                                 return merchandiseRepository.save(merchandiseToSave);
-                            }else {
+                            } else {
                                 throw new requestException("Product isn't available in the inventory, out of stock", HttpStatus.CONFLICT);
                             }
                         }
@@ -162,10 +164,10 @@ public class invoiceService {
 
     public invoice createInvoice(invoiceRequest request) {
         Optional<client> client = clientRepository.findById(request.clientId());
-        if(invoiceRepository.findById(request.invoiceId()).isEmpty()){
+        if (invoiceRepository.findById(request.invoiceId()).isEmpty()) {
             deleteInvoiceNumberByInvoiceNumber(request.invoiceId());
             List<merchandise> savedMerchandise = null;
-            if (request.merchandiseList() != null){
+            if (request.merchandiseList() != null) {
                 savedMerchandise = merchandiseRequestToMerchandise(request);
             }
             invoice invoiceToSave = invoice.builder()
@@ -173,7 +175,7 @@ public class invoiceService {
                     .invoiceDate(request.invoiceDate())
                     .client(client.get())
                     .totalTTC(request.totalTTC())
-                    .TVA(request.totalTTC().doubleValue()/6)
+                    .TVA(twoDigitTVA(request.totalTTC().doubleValue() / 6))
                     .spelledTotal(numberToWordUtil.convert(request.totalTTC()))
                     .paymentMethod(paymentMethod.valueOf(request.paymentMethod()))
                     .bankName(request.bankName())
@@ -186,9 +188,9 @@ public class invoiceService {
                     .merchandiseList(savedMerchandise)
                     .build();
             invoice saved = invoiceRepository.save(invoiceToSave);
-            if (request.merchandiseList() != null){
+            if (request.merchandiseList() != null) {
                 //savedMerchandise = merchandiseRequestToMerchandise(request);
-                for (merchandise merch: savedMerchandise
+                for (merchandise merch : savedMerchandise
                 ) {
                     Optional<merchandise> toUpdate = merchandiseRepository.findById(merch.getMerchId());
                     toUpdate.get().setInvoice(saved);
@@ -196,13 +198,12 @@ public class invoiceService {
             }
 
             return saved;
-        }
-        else throw new requestException("Invoice already exist",HttpStatus.CONFLICT);
+        } else throw new requestException("Invoice already exist", HttpStatus.CONFLICT);
     }
 
     private void deleteInvoiceNumberByInvoiceNumber(String invoiceNumber) {
         Optional<invoiceNumber> invoiceN = invoiceNumberRepository.findById(invoiceNumber);
-        if (invoiceN.isPresent()){
+        if (invoiceN.isPresent()) {
             invoiceNumberRepository.deleteById(invoiceNumber);
         }
     }
@@ -214,13 +215,13 @@ public class invoiceService {
         // and the list of available ID should have a new record (the previous Invoice id)
         /////////////////////////////////////////
         Optional<invoice> toUpdate = invoiceRepository.findById(request.invoiceId());
-        if(toUpdate.isPresent()){
+        if (toUpdate.isPresent()) {
             Optional<client> client = clientRepository.findById(request.clientId());
             toUpdate.get().setInvoiceDate(request.invoiceDate());
             toUpdate.get().setClient(client.get());
             toUpdate.get().setTotalTTC(request.totalTTC());
             toUpdate.get().setSpelledTotal(convertNumberToWords(request.totalTTC()));
-            toUpdate.get().setTVA(request.totalTTC().doubleValue()/6);
+            toUpdate.get().setTVA(twoDigitTVA(request.totalTTC().doubleValue() / 6));
             toUpdate.get().setPaymentMethod(paymentMethod.valueOf(request.paymentMethod()));
             toUpdate.get().setBankName(request.bankName());
             toUpdate.get().setCheckNumber(request.checkNumber());
@@ -230,10 +231,10 @@ public class invoiceService {
             toUpdate.get().setInvoiceStatus(status.valueOf(request.invoiceStatus()));
             toUpdate.get().setInvoiceFile(request.invoiceFile());
 
-            if(merchandiseRepository.findAllByInvoice_InvoiceId(request.invoiceId()) != null ){
+            if (merchandiseRepository.findAllByInvoice_InvoiceId(request.invoiceId()) != null) {
                 deleteAllMerchandiseUpdateInventory(request.invoiceId());
                 List<merchandise> savedMerchandise = merchandiseRequestToMerchandise(request);
-                for (merchandise merch: savedMerchandise
+                for (merchandise merch : savedMerchandise
                 ) {
                     Optional<merchandise> merchToUpdate = merchandiseRepository.findById(merch.getMerchId());
                     merchToUpdate.get().setInvoice(toUpdate.get());
@@ -241,13 +242,13 @@ public class invoiceService {
             }
 
             return invoiceRepository.save(toUpdate.get());
-        }else throw new requestException("The invoice doesn't exist", HttpStatus.NOT_FOUND);
+        } else throw new requestException("The invoice doesn't exist", HttpStatus.NOT_FOUND);
     }
 
-    public void deleteAllMerchandiseUpdateInventory(String invoiceId){
+    public void deleteAllMerchandiseUpdateInventory(String invoiceId) {
         List<merchandise> merchandiseList = merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId);
-        if(merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId) != null ){
-            for (merchandise merch: merchandiseList
+        if (merchandiseRepository.findAllByInvoice_InvoiceId(invoiceId) != null) {
+            for (merchandise merch : merchandiseList
             ) {
                 Optional<inventory> toUpdate = inventoryRepository.findByProductProductId(merch.getProduct().getProductId());
                 Double availableQuantity = toUpdate.get().getAvailability();
@@ -257,12 +258,19 @@ public class invoiceService {
         }
     }
 
+    public double twoDigitTVA(Double tva) {
+
+        return doubleTwoDigitConverter.twoDigitTVA(tva);
+    }
+
     public void deleteInvoiceById(String invoiceId) {
         Optional<invoice> toDelete = invoiceRepository.findById(invoiceId);
-        if(toDelete.isPresent()){
+        if (toDelete.isPresent()) {
             deleteAllMerchandiseUpdateInventory(invoiceId);
             invoiceRepository.deleteById(invoiceId);
             invoiceNumberRepository.save(invoiceNumber.builder().invoiceNumber(invoiceId).build());
-        }else throw new requestException("The invoice id you provided doesn't exist",HttpStatus.NOT_FOUND);
+        } else throw new requestException("The invoice id you provided doesn't exist", HttpStatus.NOT_FOUND);
     }
+
+
 }
