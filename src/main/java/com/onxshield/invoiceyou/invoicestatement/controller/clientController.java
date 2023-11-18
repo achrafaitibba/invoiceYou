@@ -31,7 +31,6 @@ public class clientController {
     }
 
 
-    //todo pagination
     @GetMapping()
     public ResponseEntity<List<clientResponse>> allClients(){
         return ResponseEntity.ok(clientService.allClients());

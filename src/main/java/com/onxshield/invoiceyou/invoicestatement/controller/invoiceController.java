@@ -7,8 +7,10 @@ import com.onxshield.invoiceyou.invoicestatement.model.invoice;
 import com.onxshield.invoiceyou.invoicestatement.model.paymentMethod;
 import com.onxshield.invoiceyou.invoicestatement.model.status;
 import com.onxshield.invoiceyou.invoicestatement.service.invoiceService;
+import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.websocket.server.PathParam;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -44,7 +46,6 @@ public class invoiceController {
     }
 
 
-    //todo pagination
     @GetMapping("/availableInvoiceNumbers")
     public ResponseEntity<String[]> getAvailableInvoiceNumbers(){
         return ResponseEntity.ok(invoiceService.getAvailableInvoiceNumbers());
@@ -72,10 +73,12 @@ public class invoiceController {
     }
 
 
-    //todo pagination, sorting by date/total
-    @GetMapping("/all")
-    public ResponseEntity<List<invoice>> getAllInvoices(){
-        return ResponseEntity.ok(invoiceService.getAllInvoices());
+    @RequestMapping(value = "/all/{page}/{size}/{direction}/{sortBy}", method = RequestMethod.GET)
+    public Page<invoice> getAllInvoices(@PathVariable Integer page,
+                                              @PathVariable Integer size,
+                                              @PathVariable String direction,
+                                              @PathVariable String sortBy){
+        return invoiceService.getAllInvoices(page, size, direction, sortBy);
     }
 
     @PostMapping("/basic/create")

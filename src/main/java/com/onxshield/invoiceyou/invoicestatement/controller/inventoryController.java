@@ -30,7 +30,7 @@ public class inventoryController {
     }
 
 
-    //todo pagination
+
     @GetMapping("/products")
     public ResponseEntity<List<productResponse>> getAllProducts(){
         return ResponseEntity.ok(inventoryService.getAllProducts());
@@ -59,8 +59,6 @@ public class inventoryController {
         return ResponseEntity.ok(inventoryService.deleteProduct(id));
     }
 
-
-    //todo pagination
     @GetMapping("/all")
     public ResponseEntity<List<inventoryResponse>> getInventory(){
         return ResponseEntity.ok(inventoryService.getInventory());
@@ -69,7 +67,6 @@ public class inventoryController {
     public ResponseEntity<inventoryResponse> getProductInventory(@PathVariable Long productId){
         return ResponseEntity.ok(inventoryService.getProductInventory(productId));
     }
-
     @PutMapping("/{productId}")
     public ResponseEntity<inventoryResponse> updateProductInventory(@PathVariable Long productId,
                                                                     @RequestBody inventoryRequest request){

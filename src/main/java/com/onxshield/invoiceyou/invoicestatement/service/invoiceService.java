@@ -10,6 +10,10 @@ import com.onxshield.invoiceyou.invoicestatement.repository.*;
 import com.onxshield.invoiceyou.invoicestatement.util.numberToWordUtil;
 import jakarta.transaction.Transactional;
 import lombok.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -79,7 +83,6 @@ public class invoiceService {
         return numbers.toArray(new String[0]);
     }
 
-    //todo, if an ID is used, delete from invoiceNumber
     public String generateInvoiceNumber() {
         int currentYear = Year.now().getValue();
         int lastTwoDigits = currentYear % 100;
@@ -127,8 +130,10 @@ public class invoiceService {
         );
     }
 
-    public List<invoice> getAllInvoices() {
-        return invoiceRepository.findAll();
+    public Page<invoice> getAllInvoices(Integer pageNumber, Integer size, String direction, String sortBy) {
+        Sort soring = Sort.by(Sort.Direction.valueOf(direction.toUpperCase()),sortBy);
+        Pageable page = PageRequest.of(pageNumber, size, soring);
+        return invoiceRepository.findAll(page);
     }
 
     public List<merchandise> merchandiseRequestToMerchandise(invoiceRequest request){
